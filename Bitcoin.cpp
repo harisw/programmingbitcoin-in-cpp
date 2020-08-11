@@ -2,32 +2,36 @@
 //
 
 #include <iostream>
-#include "FieldElement.h"
+#include "S256Field.h"
+#include "S256Point.h"
 using namespace std;
 
 int main()
 {
-    FieldElement num1 = FieldElement(5, 7);
-    FieldElement num2 = FieldElement(2, 7);
+    S256Field num1 = S256Field(5, 7);
+    S256Field num2 = S256Field(2, 7);
     
-    FieldElement res = num1 + num2;
+    S256Field res = num1 + num2;
     cout << num1.getNum() << " + " << num2.getNum() << " = ";
-    res.print();
 
     res = num1 - num2;
     cout << num1.getNum() << " - " << num2.getNum() << " = ";
-    res.print();
 
     res = num1 * num2;
     cout << num1.getNum() << " * " << num2.getNum() << " = ";
-    res.print();
 
     res = num1 ^ 3;
     cout << num1.getNum() << " ^ 3" << " = ";
-    res.print();
 
     res = num1 / num2;
     cout << num1.getNum() << " / " << num2.getNum() << " = ";
-    res.print();
-    std::cout << "Hello World!\n";
+
+    int prime = 223;
+    S256Field x = S256Field(47, prime);
+    S256Field y = S256Field(71, prime);
+    S256Field a = S256Field(0, prime);
+    S256Field b = S256Field(7, prime);
+    S256Point finitePoint = S256Point(x, y, a, b);
+    //Point invalid = Point(200, 119, 0, 7);
+
 }

@@ -18,12 +18,18 @@
     <ClCompile Include="Bitcoin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FieldElement.cpp">
+    <ClCompile Include="S256Field.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="S256Point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FieldElement.h">
+    <ClInclude Include="S256Field.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="S256Point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

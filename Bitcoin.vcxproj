@@ -148,10 +148,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bitcoin.cpp" />
-    <ClCompile Include="FieldElement.cpp" />
+    <ClCompile Include="S256Field.cpp" />
+    <ClCompile Include="S256Point.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FieldElement.h" />
+    <ClInclude Include="S256Field.h" />
+    <ClInclude Include="S256Point.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
