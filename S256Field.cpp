@@ -34,7 +34,7 @@ bool S256Field::operator==(const S256Field& operand)
 
 bool S256Field::operator!=(const S256Field& operand)
 {
-	return this->prime != operand.prime && this->num != operand.num;;
+	return !(this->prime == operand.prime && this->num == operand.num);
 }
 
 S256Field S256Field::operator+(const S256Field& operand)
@@ -50,6 +50,8 @@ S256Field S256Field::operator-(const S256Field& operand)
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
 	int result = (this->num - operand.num) % this->prime;
+	if (result < 0)
+		result = (result + this->prime) % this->prime;
 	return S256Field(result, this->prime);
 }
 
