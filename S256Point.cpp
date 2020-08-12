@@ -50,10 +50,6 @@ S256Point S256Point::operator+(S256Point& operand)
 	x3 = s * *2 - x1 - x2
 	y3 = s * (x1 - x3) - y1*/
 	if (this->x != operand.x) {
-		S256Field temp = operand.x - this->x;
-		cout << temp.getNum();
-		S256Field temp1 = operand.y - this->y;
-		cout << temp1.getNum();
 		S256Field slope = (operand.y - this->y) / (operand.x - this->x);
 		S256Field x3 = ((slope^2) - this->x) - operand.x;
 		S256Field y3 = (slope * (this->x - x3)) - this->y;
@@ -73,17 +69,8 @@ S256Point S256Point::operator+(S256Point& operand)
 	x3 = s * *2 - 2 * x1
 	y3 = s * (x1 - x3) - y1*/
 	if (*this == operand) {
-		/*S256Field temp = ;
-		cout << temp.getNum();
-		S256Field temp1 = (2 * this->y);
-		cout << temp1.getNum();
-		S256Field temp2 = (3 * temp)+this->a;
-		cout << temp2.getNum();
-		*/
 		S256Field slope = ((3*(this->x ^ 2))+this->a) / (2 * this->y);
 		S256Field x3 = (slope ^ 2) - 2 * this->x;
-		/*temp = this->x - x3;
-		temp = slope * (temp);*/
 		S256Field y3 = (slope*(this->x - x3)) - this->y;
 		return S256Point(x3, y3, this->a, this->b);
 	}

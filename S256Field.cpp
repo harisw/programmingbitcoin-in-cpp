@@ -87,7 +87,6 @@ S256Field S256Field::operator/(const S256Field& operand)
 		throw("Cannot add two numbers in different field");
 	int exp = this->prime - 2;
 	int temp = ipow(operand.num, exp, this->prime);
-	//int temp = (operand.num ^ exp) % this->prime;
 
  	int result = (this->num * temp) % this->prime;
 	
