@@ -2,6 +2,7 @@
 #include <iostream>
 using namespace std;
 
+int ipow(int base, int exp, int prime);
 S256Field::S256Field()
 {
 }
@@ -38,7 +39,7 @@ bool S256Field::operator!=(const S256Field& operand)
 
 S256Field S256Field::operator+(const S256Field& operand)
 {
-	if (this->prime != operand.prime)
+	if ( this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
 	int result = (this->num + operand.num) % this->prime;
 	return S256Field(result, this->prime);
@@ -73,7 +74,7 @@ S256Field S256Field::operator*(int operand)
 S256Field S256Field::operator^(int exponent)
 {
 	exponent = exponent % (this->prime - 1);
-	double result = (int)pow(this->num, exponent) % this->prime;
+	int result = ipow(this->num, exponent, this->prime);
 	return S256Field(result, this->prime);
 }
 
@@ -82,7 +83,12 @@ S256Field S256Field::operator/(const S256Field& operand)
 
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
-	double result = (this->num * ((int)pow(operand.num, this->prime - 2) % this->prime)) % this->prime;
+	int exp = this->prime - 2;
+	int temp = ipow(operand.num, exp, this->prime);
+	//int temp = (operand.num ^ exp) % this->prime;
+
+ 	int result = (this->num * temp) % this->prime;
+	
 	return S256Field(result, this->prime);
 }
 
@@ -111,4 +117,24 @@ S256Field operator^(int lhs, const S256Field& rhs)
 	lhs = lhs % (rhs.prime - 1);
 	double result = (int)pow(rhs.num, lhs) % rhs.prime;
 	return S256Field(result, rhs.prime);
+}
+
+int ipow(int base, int exp, int prime)
+{
+	int result = 1;
+	exp = exp % (prime - 1);
+	for (;;)
+	{
+		if (exp & 1) {
+			result *= base;
+			result %= prime;
+		}
+		exp >>= 1;
+		if (!exp)
+			break;
+		base *= base;
+		base %= prime;
+	}
+
+	return result;
 }

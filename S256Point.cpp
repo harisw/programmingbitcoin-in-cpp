@@ -1,5 +1,7 @@
 ﻿#include "S256Point.h"
 #include <cmath>
+#include <iostream>
+using namespace std;
 
 S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
 {
@@ -28,7 +30,7 @@ bool S256Point::operator==(const S256Point& operand)
 
 S256Point S256Point::operator+(S256Point& operand)
 {
-	if (this->a != operand.a || this->b != operand.b)
+ 	if (this->a != operand.a || this->b != operand.b)
 		throw("S256Point is not on the same curve!");
 
 	//case 0 if one of the point at infinity
@@ -67,9 +69,18 @@ S256Point S256Point::operator+(S256Point& operand)
 	x3 = s * *2 - 2 * x1
 	y3 = s * (x1 - x3) - y1*/
 	if (*this == operand) {
-		S256Field slope = (3 * (this->x^2) + this->a) / (2 * this->y);
-		S256Field x3 = (slope^2) - 2 * this->x;
-		S256Field y3 = slope * (this->x - x3) - this->y;
+		S256Field temp = (this->x ^ 2);
+		cout << temp.getNum();
+		S256Field temp1 = (2 * this->y);
+		cout << temp1.getNum();
+		S256Field temp2 = (3 * temp)+this->a;
+		cout << temp2.getNum();
+		
+		S256Field slope = temp2 / temp1;
+		S256Field x3 = (slope ^ 2) - 2 * this->x;
+		temp = this->x - x3;
+		temp = slope * (temp);
+		S256Field y3 = temp - this->y;
 		return S256Point(x3, y3, this->a, this->b);
 	}
 }
@@ -78,7 +89,7 @@ S256Point S256Point::operator*(int scalar)
 {
 	S256Point result = S256Point(NULL, NULL, this->a, this->b);
 	for (int j = 1; j <= scalar; j++) {
-		result = result + *this;
+		result = result + * this;
 	}
 	return result;
 }
@@ -91,4 +102,13 @@ S256Field S256Point::getX()
 S256Field S256Point::getY()
 {
 	return this->y;
+}
+
+S256Point operator*(int lhs, S256Point& rhs)
+{
+	S256Point result = S256Point(NULL, NULL, rhs.a, rhs.b);
+	for (int j = 1; j <= lhs; j++) {
+		result = result + rhs;
+	}
+	return result;
 }

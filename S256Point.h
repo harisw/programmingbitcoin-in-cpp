@@ -17,6 +17,7 @@ public:
 	bool operator==(const S256Point& operand);
 	S256Point operator+(S256Point& operand);
 	S256Point operator*(int  scalar);
+	friend S256Point operator*(int lhs, S256Point& rhs);
 	S256Field  getX();
 	S256Field  getY();
 };
