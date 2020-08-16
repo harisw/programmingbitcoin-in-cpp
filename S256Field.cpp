@@ -2,12 +2,12 @@
 #include <iostream>
 using namespace std;
 
-int ipow(int base, int exp, int prime);
+cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime);
 S256Field::S256Field()
 {
 }
 
-S256Field::S256Field(int num, int prime)
+S256Field::S256Field(cpp_int num, cpp_int prime)
 {
 	if (num >= prime || num < 0) {
 		cerr << "Number is not in field range 0 to " << prime << endl;
@@ -17,12 +17,12 @@ S256Field::S256Field(int num, int prime)
 	this->prime = prime;
 }
 
-bool S256Field::operator==(int operand)
+bool S256Field::operator==(cpp_int operand)
 {
 	return this->num == operand;
 }
 
-bool S256Field::operator!=(int operand)
+bool S256Field::operator!=(cpp_int operand)
 {
 	return this->num != operand;
 }
@@ -41,7 +41,7 @@ S256Field S256Field::operator+(const S256Field& operand)
 {
 	if ( this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
-	int result = (this->num + operand.num) % this->prime;
+	cpp_int result = (this->num + operand.num) % this->prime;
 	return S256Field(result, this->prime);
 }
 
@@ -49,7 +49,7 @@ S256Field S256Field::operator-(const S256Field& operand)
 {
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
-	int result = (this->num - operand.num) % this->prime;
+	cpp_int result = (this->num - operand.num) % this->prime;
 	if (result < 0)
 		result = (result + this->prime) % this->prime;
 	return S256Field(result, this->prime);
@@ -59,24 +59,24 @@ S256Field S256Field::operator*(const S256Field& operand)
 {
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
-	int result = (this->num * operand.num) % this->prime;
+	cpp_int result = (this->num * operand.num) % this->prime;
 	return S256Field(result, this->prime);
 }
 
-S256Field S256Field::operator*(int operand)
+S256Field S256Field::operator*(cpp_int operand)
 {
 	if (operand >= this->prime || operand < 0) {
 		throw("Number is not in field range 0 to %d", this->prime);
 	}
 
-	int result = (this->num * operand) % this->prime;
+	cpp_int result = (this->num * operand) % this->prime;
 	return S256Field(result, this->prime);
 }
 
-S256Field S256Field::operator^(int exponent)
+S256Field S256Field::operator^(cpp_int exponent)
 {
 	exponent = exponent % (this->prime - 1);
-	int result = ipow(this->num, exponent, this->prime);
+	cpp_int result = ipow(this->num, exponent, this->prime);
 	return S256Field(result, this->prime);
 }
 
@@ -85,45 +85,45 @@ S256Field S256Field::operator/(const S256Field& operand)
 
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
-	int exp = this->prime - 2;
-	int temp = ipow(operand.num, exp, this->prime);
+	cpp_int exp = this->prime - 2;
+	cpp_int temp = ipow(operand.num, exp, this->prime);
 
- 	int result = (this->num * temp) % this->prime;
+ 	cpp_int result = (this->num * temp) % this->prime;
 	
 	return S256Field(result, this->prime);
 }
 
-int S256Field::getNum()
+cpp_int S256Field::getNum()
 {
 	return this->num;
 }
 
-int S256Field::getPrime()
+cpp_int S256Field::getPrime()
 {
 	return this->prime;
 }
 
-S256Field operator*(int lhs, const S256Field& rhs)
+S256Field operator*(cpp_int lhs, const S256Field& rhs)
 {
 	if (lhs >= rhs.prime || lhs < 0) {
 		throw("Number is not in field range 0 to %d", rhs.prime);
 	}
 
-	int result = (rhs.num * lhs) % rhs.prime;
+	cpp_int result = (rhs.num * lhs) % rhs.prime;
 	return S256Field(result, rhs.prime);
 }
 
-S256Field operator^(int lhs, const S256Field& rhs)
-{
-	lhs = lhs % (rhs.prime - 1);
-	double result = (int)pow(rhs.num, lhs) % rhs.prime;
-	return S256Field(result, rhs.prime);
-}
+//S256Field operator^(cpp_int lhs, const S256Field& rhs)
+//{
+//	lhs = lhs % (rhs.prime - 1);
+//	double result = (int)pow(rhs.num, lhs) % rhs.prime;
+//	return S256Field(result, rhs.prime);
+//}
 
-int ipow(int base, int exp, int prime)
+cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime)
 {
-	int result = 1;
-	exp = exp % (prime - 1);
+	cpp_int result = 1;
+	exp = exp % (prime - 1);		//TO REDUCE BIG EXPONENT AND FORCE THE EXPONENT NOT TO BE NEGATIVE
 	for (;;)
 	{
 		if (exp & 1) {

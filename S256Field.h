@@ -2,29 +2,33 @@
 #ifndef S256F_H
 #define S256F_H
 
+#include <boost/multiprecision/cpp_int.hpp>
+using boost::multiprecision::cpp_int;
+using namespace std;
+
 class S256Field
 {
 private:
-	int num;
-	int prime;
+	cpp_int num;
+	cpp_int prime;
 public:
 	S256Field();
-	S256Field(int num, int prime);
-	bool operator==(int rhs);
-	bool operator!=(int rhs);
+	S256Field(cpp_int num, cpp_int prime);
+	bool operator==(cpp_int rhs);
+	bool operator!=(cpp_int rhs);
 	bool operator==(const S256Field& rhs);
 	bool operator!=(const S256Field& rhs);
 	S256Field operator+(const S256Field& rhs);
 	S256Field operator-(const S256Field& rhs);
 
 	S256Field operator*(const S256Field& rhs);
-	S256Field operator*(int rhs);
-	friend S256Field operator*(int lhs, const S256Field& rhs);
+	S256Field operator*(cpp_int rhs);
+	friend S256Field operator*(cpp_int lhs, const S256Field& rhs);
 	
-	S256Field operator^(int exponent);
-	friend S256Field operator^(int lhs, const S256Field& rhs);
+	S256Field operator^(cpp_int exponent);
+	//friend S256Field operator^(cpp_int lhs, const S256Field& rhs);
 	S256Field operator/(const S256Field& rhs);
-	int getNum();
-	int getPrime();
+	cpp_int getNum();
+	cpp_int getPrime();
 };
 #endif // !S256F_H
