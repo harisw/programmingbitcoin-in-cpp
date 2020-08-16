@@ -2,9 +2,20 @@
 #include <iostream>
 using namespace std;
 
-cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime);
+cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0);
 S256Field::S256Field()
 {
+}
+
+S256Field::S256Field(cpp_int num)
+{
+	cpp_int s256_prime = ipow(2, 256) - ipow(2, 32) - 977;
+	this->num = num;
+	this->prime = s256_prime;
+
+	if (num >= this->prime || num < 0) {
+		throw("Number is not in field range 0 to prime number");
+	}
 }
 
 S256Field::S256Field(cpp_int num, cpp_int prime)
@@ -123,18 +134,32 @@ S256Field operator*(cpp_int lhs, const S256Field& rhs)
 cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime)
 {
 	cpp_int result = 1;
-	exp = exp % (prime - 1);		//TO REDUCE BIG EXPONENT AND FORCE THE EXPONENT NOT TO BE NEGATIVE
-	for (;;)
-	{
-		if (exp & 1) {
-			result *= base;
-			result %= prime;
+	if (prime == 0) {
+		for (;;)
+		{
+			if (exp & 1) {
+				result *= base;
+			}
+			exp >>= 1;
+			if (!exp)
+				break;
+			base *= base;
 		}
-		exp >>= 1;
-		if (!exp)
-			break;
-		base *= base;
-		base %= prime;
+	}
+	else {
+		exp = exp % (prime - 1);		//TO REDUCE BIG EXPONENT AND FORCE THE EXPONENT NOT TO BE NEGATIVE
+		for (;;)
+		{
+			if (exp & 1) {
+				result *= base;
+				result %= prime;
+			}
+			exp >>= 1;
+			if (!exp)
+				break;
+			base *= base;
+			base %= prime;
+		}
 	}
 
 	return result;

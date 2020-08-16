@@ -12,6 +12,7 @@ private:
 	S256Field  a;
 	S256Field  b;
 public:
+	S256Point(S256Field x, S256Field y);
 	S256Point(S256Field x, S256Field y, S256Field  a, S256Field  b);
 	S256Point(int x, int y, S256Field  a, S256Field  b);
 	bool operator==(const S256Point& operand);

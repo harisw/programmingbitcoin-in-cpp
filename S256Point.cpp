@@ -3,6 +3,17 @@
 #include <iostream>
 using namespace std;
 
+S256Point::S256Point(S256Field x, S256Field y)
+{
+	this->x = x;
+	this->y = y;
+	this->a = S256Field(0);
+	this->b = S256Field(7);
+
+	if ((y ^ 2) != ((x ^ 3) + a * x + b))
+		throw("S256Point (%d, %d) is not on the curve!", x, y);
+}
+
 S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
 {
 	this->x = x;

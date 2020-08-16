@@ -13,6 +13,7 @@ private:
 	cpp_int prime;
 public:
 	S256Field();
+	S256Field(cpp_int num);
 	S256Field(cpp_int num, cpp_int prime);
 	bool operator==(cpp_int rhs);
 	bool operator!=(cpp_int rhs);

@@ -32,6 +32,7 @@ int main()
     S256Field a = S256Field(0, prime);
     S256Field b = S256Field(7, prime);
     S256Point finitePoint = S256Point(x, y, a, b);
-    finitePoint = finitePoint*19;
+    finitePoint = finitePoint*20;
+    cout << "Point : (" << finitePoint.getX().getNum() << " , " << finitePoint.getX().getNum() << ")" << endl;
 
 }
