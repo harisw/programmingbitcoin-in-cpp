@@ -2,9 +2,13 @@
 #ifndef S256F_H
 #define S256F_H
 
-#include <boost/multiprecision/cpp_int.hpp>
-using boost::multiprecision::cpp_int;
-using namespace std;
+#include "Helper.h"
+
+//#include <boost/multiprecision/cpp_int.hpp>
+//#include <iostream>
+//using namespace std;
+//using boost::multiprecision::cpp_int;
+
 
 class S256Field
 {

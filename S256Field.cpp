@@ -1,8 +1,5 @@
 #include "S256Field.h"
-#include <iostream>
-using namespace std;
 
-cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0);
 S256Field::S256Field()
 {
 }
@@ -21,7 +18,7 @@ S256Field::S256Field(cpp_int num)
 S256Field::S256Field(cpp_int num, cpp_int prime)
 {
 	if (num >= prime || num < 0) {
-		cerr << "Number is not in field range 0 to " << prime << endl;
+		throw("Number is not in field range 0 to prime number");
 		return;
 	}
 	this->num = num;
@@ -68,6 +65,8 @@ S256Field S256Field::operator-(const S256Field& operand)
 
 S256Field S256Field::operator*(const S256Field& operand)
 {
+	cout << this->prime << endl;
+	cout << operand.prime << endl;
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
 	cpp_int result = (this->num * operand.num) % this->prime;
@@ -130,37 +129,3 @@ S256Field operator*(cpp_int lhs, const S256Field& rhs)
 //	double result = (int)pow(rhs.num, lhs) % rhs.prime;
 //	return S256Field(result, rhs.prime);
 //}
-
-cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime)
-{
-	cpp_int result = 1;
-	if (prime == 0) {
-		for (;;)
-		{
-			if (exp & 1) {
-				result *= base;
-			}
-			exp >>= 1;
-			if (!exp)
-				break;
-			base *= base;
-		}
-	}
-	else {
-		exp = exp % (prime - 1);		//TO REDUCE BIG EXPONENT AND FORCE THE EXPONENT NOT TO BE NEGATIVE
-		for (;;)
-		{
-			if (exp & 1) {
-				result *= base;
-				result %= prime;
-			}
-			exp >>= 1;
-			if (!exp)
-				break;
-			base *= base;
-			base %= prime;
-		}
-	}
-
-	return result;
-}
