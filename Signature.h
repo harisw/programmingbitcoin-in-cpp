@@ -3,9 +3,6 @@
 #define SIGNATURE_H
 
 #include "Helper.h"
-//#include <boost/multiprecision/cpp_int.hpp>
-//using boost::multiprecision::cpp_int;
-//using namespace std;
 
 class Signature
 {

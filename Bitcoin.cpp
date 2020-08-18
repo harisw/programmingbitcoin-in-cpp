@@ -4,8 +4,6 @@
 #include "S256Point.h"
 #include <boost/lexical_cast.hpp>
 using namespace boost;
-//using boost::multiprecision::cpp_int;
-//using namespace std;
 
 int main()
 {

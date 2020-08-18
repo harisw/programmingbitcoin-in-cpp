@@ -6,10 +6,6 @@
 #include "S256Point.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
-//#include <boost/multiprecision/cpp_int.hpp>
-//#include "Signature.h"
-//using boost::multiprecision::cpp_int;
-//using namespace std;
 
 class PrivateKey
 {

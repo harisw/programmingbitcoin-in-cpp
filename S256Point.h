@@ -3,12 +3,7 @@
 #define POINT_H
 
 #include "S256Field.h"
-//#include <boost/multiprecision/cpp_int.hpp>
 #include "Signature.h"
-//#include "Helper.h"
-//#include <iostream>
-//using boost::multiprecision::cpp_int;
-//using namespace std;
 
 class S256Point
 {

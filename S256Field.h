@@ -4,12 +4,6 @@
 
 #include "Helper.h"
 
-//#include <boost/multiprecision/cpp_int.hpp>
-//#include <iostream>
-//using namespace std;
-//using boost::multiprecision::cpp_int;
-
-
 class S256Field
 {
 private:
