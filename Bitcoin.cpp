@@ -2,6 +2,7 @@
 //
 #define _CRT_SECURE_NO_WARNINGS
 #include "S256Point.h"
+#include "PrivateKey.h"
 
 int main()
 {
@@ -10,17 +11,18 @@ int main()
 
     /*a 32-bit hexadecimal number*/
     //cpp_int x("0x175e3");
-    cpp_int x(1234567891011121314);
-    cout << x << endl;
-    string bytearr = int_to_byte(x, 32);
+    //cpp_int x(1234567891011121314);
+    //cout << x << endl;
+    //string bytearr = int_to_byte(x, 32);
 
-    cout << bytearr << endl;
+    //cout << bytearr << endl;
 
-    string reversed_byte = reverse_endian(bytearr);
-    
-    cout << reversed_byte << endl;
+    //string reversed_byte = reverse_endian(bytearr);
+    //
+    //cout << reversed_byte << endl;
 
 
+    cout << PrivateKey(5000).pub_key.sec(false) << endl;
     //S256Field num1 = S256Field(190, 223);
     //S256Field num2 = S256Field(7, 223);
     //

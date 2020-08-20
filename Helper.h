@@ -45,11 +45,18 @@ inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
 	return result;
 }
 
-
-inline string int_to_byte(cpp_int num, int byte_size)
+inline string dec_to_hex(cpp_int num)
 {
-	string result = lexical_cast<string>(num);
-	int zero_pad = byte_size - result.size();
+	stringstream stream;
+	stream << hex << num;
+	string result(stream.str());
+	return result;
+}
+
+inline string int_to_byte(string inp, int byte_size)
+{
+	string result = inp;
+	int zero_pad = byte_size - (result.size()/2);
 
 	result = string(zero_pad, '0').append(result);
 	return result;

@@ -65,8 +65,6 @@ S256Field S256Field::operator-(const S256Field& operand)
 
 S256Field S256Field::operator*(const S256Field& operand)
 {
-	cout << this->prime << endl;
-	cout << operand.prime << endl;
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
 	cpp_int result = (this->num * operand.num) % this->prime;

@@ -23,8 +23,10 @@ public:
 	friend S256Point operator*(cpp_int lhs, S256Point& rhs);
 	S256Field  getX();
 	S256Field  getY();
+	S256Field  getA();
+	S256Field  getB();
 	bool verify(cpp_int z, Signature sig);
-	cpp_int sec(bool compressed = true);
+	string sec(bool compressed = true);
 };
 
 #endif

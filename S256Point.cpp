@@ -22,8 +22,8 @@ S256Point::S256Point(cpp_int x, cpp_int y)
 	this->a = S256Field(0);
 	this->b = S256Field(7);
 
-	if ((this->y ^ 2) != ((this->x ^ 3) + this->a * this->x + this->b))
-		throw("S256Point (%d, %d) is not on the curve!", x, y);
+	/*if ((this->y ^ 2) != ((this->x ^ 3) + this->a * this->x + this->b))
+		throw("S256Point (%d, %d) is not on the curve!", x, y);*/
 }
 
 S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
@@ -33,8 +33,8 @@ S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
 	this->a = a;
 	this->b = b;
 
-	if ((y^2) != ( (x^3) + a * x + b) )
-		throw("S256Point (%d, %d) is not on the curve!", x, y);
+	//if ((y^2) != ( ((x^3) + (a*x)) + b) )
+	//	throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
 bool S256Point::operator==(const S256Point& operand)
@@ -110,6 +110,16 @@ S256Field S256Point::getY()
 	return this->y;
 }
 
+S256Field S256Point::getA()
+{
+	return this->a;
+}
+
+S256Field S256Point::getB()
+{
+	return this->b;
+}
+
 bool S256Point::verify(cpp_int z, Signature sig)
 {
 	S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
@@ -126,14 +136,21 @@ bool S256Point::verify(cpp_int z, Signature sig)
 	return total.x.getNum() == sig.getR();
 }
 
-cpp_int S256Point::sec(bool compressed)
+string S256Point::sec(bool compressed)
 {
+	string result = "";
 	if (compressed) {
-		if (this->y.getNum() % 2 == 0) {
+		if (this->y.getNum() % 2 == 0)
+			result += "02";
+		else
+			result += "03";
 
-		}
+		return result + int_to_byte(dec_to_hex(this->x.getNum()), 32);
 	}
-	return cpp_int();
+	else {
+		result += "04";
+		return result + int_to_byte(dec_to_hex(this->x.getNum()), 32) + int_to_byte(dec_to_hex(this->y.getNum()), 32);
+	}
 }
 
 S256Point operator*(cpp_int lhs, S256Point& rhs)
