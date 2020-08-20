@@ -24,6 +24,7 @@ public:
 	S256Field  getX();
 	S256Field  getY();
 	bool verify(cpp_int z, Signature sig);
+	cpp_int sec(bool compressed = true);
 };
 
 #endif

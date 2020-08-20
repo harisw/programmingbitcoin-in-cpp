@@ -2,13 +2,13 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-#include <boost/multiprecision/cpp_int.hpp>
 #include <iostream>
 #include <cmath>
-using boost::multiprecision::cpp_int;
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/lexical_cast.hpp>
 using namespace std;
-
-//cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0);
+using namespace boost;
+using boost::multiprecision::cpp_int;
 
 
 inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
@@ -42,6 +42,29 @@ inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
 		}
 	}
 
+	return result;
+}
+
+
+inline string int_to_byte(cpp_int num, int byte_size)
+{
+	string result = lexical_cast<string>(num);
+	int zero_pad = byte_size - result.size();
+
+	result = string(zero_pad, '0').append(result);
+	return result;
+}
+
+inline string reverse_endian(string val)
+{
+	string result = "";
+	int pos = 0;
+
+	for (int j = val.size() - 1; j > 0; j -= 2) {
+		result += val[j - 1];
+		result += val[j];
+		pos += 2;
+	}
 	return result;
 }
 #endif // !HELPER_H

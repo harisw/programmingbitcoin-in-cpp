@@ -126,6 +126,16 @@ bool S256Point::verify(cpp_int z, Signature sig)
 	return total.x.getNum() == sig.getR();
 }
 
+cpp_int S256Point::sec(bool compressed)
+{
+	if (compressed) {
+		if (this->y.getNum() % 2 == 0) {
+
+		}
+	}
+	return cpp_int();
+}
+
 S256Point operator*(cpp_int lhs, S256Point& rhs)
 {
 	S256Point result = S256Point((cpp_int)0, (cpp_int)0, rhs.a, rhs.b);
