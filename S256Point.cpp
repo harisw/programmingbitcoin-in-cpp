@@ -1,4 +1,6 @@
 ﻿#include "S256Point.h"
+#define S256_A 0
+#define S256_B 7
 
 S256Point::S256Point()
 {
@@ -8,10 +10,10 @@ S256Point::S256Point(S256Field x, S256Field y)
 {
 	this->x = x;
 	this->y = y;
-	this->a = S256Field(0);
-	this->b = S256Field(7);
+	this->a = S256Field(S256_A);
+	this->b = S256Field(S256_B);
 
-	if ((y ^ 2) != ((x ^ 3) + a * x + b))
+	if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a*x) + this->b))
 		throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
@@ -19,11 +21,11 @@ S256Point::S256Point(cpp_int x, cpp_int y)
 {
 	this->x = S256Field(x);
 	this->y = S256Field(y);
-	this->a = S256Field(0);
-	this->b = S256Field(7);
+	this->a = S256Field(S256_A);
+	this->b = S256Field(S256_B);
 
-	/*if ((this->y ^ 2) != ((this->x ^ 3) + this->a * this->x + this->b))
-		throw("S256Point (%d, %d) is not on the curve!", x, y);*/
+	if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a * x) + this->b))
+		throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
 S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
@@ -33,8 +35,8 @@ S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
 	this->a = a;
 	this->b = b;
 
-	//if ((y^2) != ( ((x^3) + (a*x)) + b) )
-	//	throw("S256Point (%d, %d) is not on the curve!", x, y);
+	if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a * x) + this->b))
+		throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
 bool S256Point::operator==(const S256Point& operand)
@@ -66,7 +68,7 @@ S256Point S256Point::operator+(S256Point& operand)
 	y3 = s * (x1 - x3) - y1*/
 	if (this->x != operand.x) {
 		S256Field slope = (operand.y - this->y) / (operand.x - this->x);
-		S256Field x3 = ((slope^2) - this->x) - operand.x;
+		S256Field x3 = ((slope.pow(2)) - this->x) - operand.x;
 		S256Field y3 = (slope * (this->x - x3)) - this->y;
 		return S256Point(x3, y3, this->a, this->b);
 	}
@@ -84,8 +86,8 @@ S256Point S256Point::operator+(S256Point& operand)
 	x3 = s * *2 - 2 * x1
 	y3 = s * (x1 - x3) - y1*/
 	if (*this == operand) {
-		S256Field slope = ((3*(this->x ^ 2))+this->a) / (2 * this->y);
-		S256Field x3 = (slope ^ 2) - 2 * this->x;
+		S256Field slope = ((3*(this->x.pow(2)))+this->a) / (2 * this->y);
+		S256Field x3 = (slope.pow(2)) - 2 * this->x;
 		S256Field y3 = (slope*(this->x - x3)) - this->y;
 		return S256Point(x3, y3, this->a, this->b);
 	}
@@ -150,6 +152,25 @@ string S256Point::sec(bool compressed)
 	else {
 		result += "04";
 		return result + int_to_byte(dec_to_hex(this->x.getNum()), 32) + int_to_byte(dec_to_hex(this->y.getNum()), 32);
+	}
+}
+
+S256Point S256Point::parse(string sec_bin)
+{
+	if (sec_bin.substr(0, 2) == "04") {
+		cpp_int parsed_x(sec_bin.substr(2, 32));
+		cpp_int parsed_y(sec_bin.substr(32, 32));
+		return S256Point(parsed_x, parsed_y);
+	}
+	else {
+		bool is_even = sec_bin.substr(0, 2) == "02";
+		cpp_int parsed_x(sec_bin.substr(2));
+
+		S256Field finite_x = S256Field(parsed_x);
+		S256Field finite_y = finite_x.pow(3) + S256Field(S256_B);
+		finite_y = finite_y.sqrt();
+		
+		return S256Point(finite_x, finite_y);
 	}
 }
 

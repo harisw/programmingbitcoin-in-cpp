@@ -81,7 +81,7 @@ S256Field S256Field::operator*(cpp_int operand)
 	return S256Field(result, this->prime);
 }
 
-S256Field S256Field::operator^(cpp_int exponent)
+S256Field S256Field::pow(cpp_int exponent)
 {
 	exponent = exponent % (this->prime - 1);
 	cpp_int result = ipow(this->num, exponent, this->prime);
@@ -99,6 +99,13 @@ S256Field S256Field::operator/(const S256Field& operand)
  	cpp_int result = (this->num * temp) % this->prime;
 	
 	return S256Field(result, this->prime);
+}
+
+cpp_int S256Field::sqrt()
+{
+	cpp_int exponent = (this->prime + 1) / 4;
+
+	return this->pow(exponent).getNum();
 }
 
 cpp_int S256Field::getNum()

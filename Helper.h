@@ -6,6 +6,7 @@
 #include <cmath>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/lexical_cast.hpp>
+#include "SHA256.h"
 using namespace std;
 using namespace boost;
 using boost::multiprecision::cpp_int;
@@ -73,5 +74,44 @@ inline string reverse_endian(string val)
 		pos += 2;
 	}
 	return result;
+}
+
+inline string encode_base58(string inp)
+{
+	string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
+	int leading_zeros = 0;
+	for (int j = 0; j < inp.length(); j++) {
+		if (inp[j] == '0')
+			leading_zeros++;
+		else
+			break;
+	}
+	cpp_int num(inp);
+	string prefix(leading_zeros, '1');
+	string result = "";
+
+	while (num > 0) {
+		cpp_int quotient = num / 58;
+		int remainder = (int)(num % 58);
+		
+		result = BASE58_ALPHABET[remainder] + result;
+		num = quotient;
+	}
+	return prefix + result;
+}
+
+inline string hash256(string inp)
+{
+	return sha256(sha256(inp));
+}
+
+inline string hash160(string inp)
+{
+
+}
+inline string base58_checksum(string inp)
+{
+	return encode_base58(inp + hash256(inp).substr(0, 8));
 }
 #endif // !HELPER_H

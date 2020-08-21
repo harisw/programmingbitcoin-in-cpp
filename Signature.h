@@ -13,6 +13,7 @@ public:
 	Signature(cpp_int inp_r, cpp_int inp_s);
 	cpp_int getR();
 	cpp_int getS();
+	string der();
 };
 
 #endif

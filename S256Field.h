@@ -24,9 +24,10 @@ public:
 	S256Field operator*(cpp_int rhs);
 	friend S256Field operator*(cpp_int lhs, const S256Field& rhs);
 	
-	S256Field operator^(cpp_int exponent);
+	S256Field pow(cpp_int exponent);
 	//friend S256Field operator^(cpp_int lhs, const S256Field& rhs);
 	S256Field operator/(const S256Field& rhs);
+	cpp_int sqrt();
 	cpp_int getNum();
 	cpp_int getPrime();
 };

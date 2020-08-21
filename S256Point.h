@@ -27,6 +27,7 @@ public:
 	S256Field  getB();
 	bool verify(cpp_int z, Signature sig);
 	string sec(bool compressed = true);
+	S256Point parse(string sec_bin);
 };
 
 #endif
