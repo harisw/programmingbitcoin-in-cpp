@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "SHA256.h"
 #include <cstring>
 #include <fstream>

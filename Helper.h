@@ -2,11 +2,13 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cmath>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/lexical_cast.hpp>
 #include "SHA256.h"
+#include "ripemd160.h"
 using namespace std;
 using namespace boost;
 using boost::multiprecision::cpp_int;
@@ -106,10 +108,30 @@ inline string hash256(string inp)
 	return sha256(sha256(inp));
 }
 
+inline string uint8_to_hex_string(const uint8_t* v, const size_t s) {
+	std::stringstream ss;
+
+	ss << std::hex << std::setfill('0');
+
+	for (int i = 0; i < s; i++) {
+		ss << std::hex << std::setw(2) << static_cast<int>(v[i]);
+	}
+
+	return ss.str();
+}
+
 inline string hash160(string inp)
 {
+	inp = sha256(inp);
+	unsigned char* val = new unsigned char[inp.length() + 1];
+	strcpy((char*)val, inp.c_str());
 
+	unsigned char hash[sizeof(val) + 1];
+	ripemd160(val, sizeof(val), hash);
+	string result = uint8_to_hex_string(hash, sizeof(hash));
+	return result;
 }
+
 inline string base58_checksum(string inp)
 {
 	return encode_base58(inp + hash256(inp).substr(0, 8));

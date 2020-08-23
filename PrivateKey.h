@@ -2,7 +2,6 @@
 #ifndef PRIVKEY_H
 #define PRIVKEY_H
 
-#include "Helper.h"
 #include "S256Point.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>

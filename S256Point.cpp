@@ -13,8 +13,8 @@ S256Point::S256Point(S256Field x, S256Field y)
 	this->a = S256Field(S256_A);
 	this->b = S256Field(S256_B);
 
-	if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a*x) + this->b))
-		throw("S256Point (%d, %d) is not on the curve!", x, y);
+	//if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a*x) + this->b))
+	//	throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
 S256Point::S256Point(cpp_int x, cpp_int y)
@@ -24,8 +24,8 @@ S256Point::S256Point(cpp_int x, cpp_int y)
 	this->a = S256Field(S256_A);
 	this->b = S256Field(S256_B);
 
-	if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a * x) + this->b))
-		throw("S256Point (%d, %d) is not on the curve!", x, y);
+	/*if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a * x) + this->b))
+		throw("S256Point (%d, %d) is not on the curve!", x, y);*/
 }
 
 S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
@@ -35,8 +35,8 @@ S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
 	this->a = a;
 	this->b = b;
 
-	if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a * x) + this->b))
-		throw("S256Point (%d, %d) is not on the curve!", x, y);
+	//if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a * x) + this->b))
+	//	throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
 bool S256Point::operator==(const S256Point& operand)
