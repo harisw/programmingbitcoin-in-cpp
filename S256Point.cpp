@@ -174,6 +174,17 @@ S256Point S256Point::parse(string sec_bin)
 	}
 }
 
+string S256Point::address(bool compressed, bool testnet)
+{
+	string hash160_result = hash160(sec(compressed));
+	string prefix;
+	if (testnet)
+		prefix = "6f";
+	else
+		prefix = "00";
+	return base58_checksum(prefix + hash160_result);
+}
+
 S256Point operator*(cpp_int lhs, S256Point& rhs)
 {
 	S256Point result = S256Point((cpp_int)0, (cpp_int)0, rhs.a, rhs.b);

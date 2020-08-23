@@ -22,7 +22,7 @@ int main()
     //cout << reversed_byte << endl;
 
 
-    cout << PrivateKey(5000).pub_key.sec(false) << endl;
+    cout << PrivateKey(5000).pub_key.address(false, true) << endl;
     //S256Field num1 = S256Field(190, 223);
     //S256Field num2 = S256Field(7, 223);
     //
