@@ -35,3 +35,13 @@ cpp_int PrivateKey::random_int()
     boost::random::uniform_int_distribution<> dist(1);
     return cpp_int(dist(gen));
 }
+
+string PrivateKey::wif(bool compressed, bool testnet)
+{
+    string secret_bytes = int_to_byte(dec_to_hex(this->secret), 32);
+    
+    string prefix = testnet ? "ef" : "80";
+    string suffix = compressed ? "01" : "";
+
+	return base58_checksum(prefix + secret_bytes + suffix);
+}
