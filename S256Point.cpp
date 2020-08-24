@@ -189,9 +189,6 @@ S256Point operator*(cpp_int lhs, S256Point& rhs)
 {
 	S256Point result = S256Point((cpp_int)0, (cpp_int)0, rhs.a, rhs.b);
 	S256Point current = rhs;
-	/*for (int j = 1; j <= lhs; j++) {
-		result = result + rhs;
-	}*/
 	while (lhs) {
 		if (lhs & 1)
 			result = result + current;

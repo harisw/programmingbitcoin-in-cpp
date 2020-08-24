@@ -7,8 +7,7 @@ S256Field::S256Field()
 S256Field::S256Field(cpp_int num)
 {
 	cpp_int s256_prime("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F");
-	
-	//cpp_int s256_prime = ipow(2, 256) - ipow(2, 32) - 977;
+
 	this->num = num;
 	this->prime = s256_prime;
 
@@ -129,10 +128,3 @@ S256Field operator*(cpp_int lhs, const S256Field& rhs)
 	cpp_int result = (rhs.num * lhs) % rhs.prime;
 	return S256Field(result, rhs.prime);
 }
-
-//S256Field operator^(cpp_int lhs, const S256Field& rhs)
-//{
-//	lhs = lhs % (rhs.prime - 1);
-//	double result = (int)pow(rhs.num, lhs) % rhs.prime;
-//	return S256Field(result, rhs.prime);
-//}
