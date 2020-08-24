@@ -48,12 +48,20 @@ inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
 	return result;
 }
 
-inline string dec_to_hex(cpp_int num)
+//inline string dec_to_hex(cpp_int num, int width)
+//{
+//	stringstream stream;
+//	stream << hex << num;
+//	string result(stream.str());
+//	return result;
+//}
+
+inline string dec_to_hex_byte(cpp_int num, int width = 0)
 {
 	stringstream stream;
-	stream << hex << num;
-	string result(stream.str());
-	return result;
+	stream << setfill('0') << setw(width) << hex << num;
+	
+	return stream.str();
 }
 
 inline string int_to_byte(string inp, int byte_size)
@@ -128,7 +136,6 @@ inline string hash160(string inp)
 
 	unsigned char* hash = new unsigned char[sizeof(val) + 25];
 
-//	unsigned char hash[sizeof(val) + 1];
 	ripemd160(val, sizeof(val), hash);
 	string result = uint8_to_hex_string(hash, sizeof(hash));
 	return result;
@@ -137,6 +144,8 @@ inline string hash160(string inp)
 inline string base58_checksum(string inp)
 {
 	string hash_result = hash256(inp);
+	cout << "INP : " << inp << endl;
+	cout << "HASH256: " << hash_result << endl;
 	string result = inp + hash_result.substr(0, 8);
 	return encode_base58(result);
 }

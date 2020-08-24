@@ -156,11 +156,11 @@ string S256Point::sec(bool compressed)
 		else
 			result += "03";
 
-		return result + int_to_byte(dec_to_hex(this->x.getNum()), 32);
+		return result + dec_to_hex_byte(this->x.getNum(), 32);
 	}
 	else {
 		result += "04";
-		return result + int_to_byte(dec_to_hex(this->x.getNum()), 32) + int_to_byte(dec_to_hex(this->y.getNum()), 32);
+		return result + dec_to_hex_byte(this->x.getNum(), 32) + dec_to_hex_byte(this->y.getNum(), 32);
 	}
 }
 

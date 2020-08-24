@@ -38,7 +38,7 @@ cpp_int PrivateKey::random_int()
 
 string PrivateKey::wif(bool compressed, bool testnet)
 {
-    string secret_bytes = int_to_byte(dec_to_hex(this->secret), 32);
+    string secret_bytes = dec_to_hex_byte(this->secret, 32);
     
     string prefix = testnet ? "ef" : "80";
     string suffix = compressed ? "01" : "";

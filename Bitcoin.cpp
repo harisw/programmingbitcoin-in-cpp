@@ -6,11 +6,11 @@
 
 int main()
 {
-    S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
-        cpp_int{ "0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8" });
-    cout << "x = " << genPoint.getX().getNum() << endl;
-    cout << "y = " << genPoint.getY().getNum() << endl;
-    cout << "prime = " << genPoint.getY().getPrime() << endl;
+    //S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
+    //    cpp_int{ "0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8" });
+    //cout << "x = " << genPoint.getX().getNum() << endl;
+    //cout << "y = " << genPoint.getY().getNum() << endl;
+    //cout << "prime = " << genPoint.getY().getPrime() << endl;
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");    
 
     /*a 32-bit hexadecimal number*/
@@ -25,8 +25,15 @@ int main()
     //
     //cout << reversed_byte << endl;
 
-    cout << PrivateKey(1000).pub_key.getX().getNum() << endl;
-    cout << PrivateKey(1000).pub_key.getY().getNum() << endl;
+    Signature example = Signature(cpp_int{ "0x37206a0610995c58074999cb9767b87af4c4978db68c06e8e6e81d282047a7c6" },
+            cpp_int{ "0x8ca63759c1157ebeaec0d03cecca119fc9a75bf8e6d0fa65c841c8e2738cdaec" });
+    cout << "DER : " << example.der() << endl;
+    PrivateKey priv_key = PrivateKey(1000);
+    //cout << "SEC : " << priv_key.pub_key.sec(false) << endl << endl;
+    /*cout << "Private Key X : " << dec_to_hex_byte(priv_key.pub_key.getX().getNum()) << endl;
+    cout << "Private Key Y : " << dec_to_hex_byte(priv_key.pub_key.getY().getNum()) << endl<<endl;*/
+    cout << "Address : " << priv_key.pub_key.address(true, true) << endl;
+    cout << "Address : " << priv_key.wif(true, true) << endl;
     //cout << PrivateKey(5000).pub_key.address(false, true) << endl;
     //S256Field num1 = S256Field(190, 223);
     //S256Field num2 = S256Field(7, 223);
