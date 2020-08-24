@@ -6,7 +6,11 @@
 
 int main()
 {
-
+    S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
+        cpp_int{ "0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8" });
+    cout << "x = " << genPoint.getX().getNum() << endl;
+    cout << "y = " << genPoint.getY().getNum() << endl;
+    cout << "prime = " << genPoint.getY().getPrime() << endl;
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");    
 
     /*a 32-bit hexadecimal number*/
@@ -21,8 +25,9 @@ int main()
     //
     //cout << reversed_byte << endl;
 
-
-    cout << PrivateKey(5000).pub_key.address(false, true) << endl;
+    cout << PrivateKey(1000).pub_key.getX().getNum() << endl;
+    cout << PrivateKey(1000).pub_key.getY().getNum() << endl;
+    //cout << PrivateKey(5000).pub_key.address(false, true) << endl;
     //S256Field num1 = S256Field(190, 223);
     //S256Field num2 = S256Field(7, 223);
     //

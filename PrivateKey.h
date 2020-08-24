@@ -14,7 +14,7 @@ public:
 	Signature sign(cpp_int z);
 	cpp_int random_int();
 	string wif(bool compressed = true, bool testnet = false);
-private:
+//private:
 	cpp_int secret;
 	S256Point pub_key;
 };

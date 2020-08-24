@@ -6,7 +6,9 @@ S256Field::S256Field()
 
 S256Field::S256Field(cpp_int num)
 {
-	cpp_int s256_prime = ipow(2, 256) - ipow(2, 32) - 977;
+	cpp_int s256_prime("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F");
+	
+	//cpp_int s256_prime = ipow(2, 256) - ipow(2, 32) - 977;
 	this->num = num;
 	this->prime = s256_prime;
 
