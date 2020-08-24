@@ -89,7 +89,7 @@ inline string encode_base58(string inp)
 		else
 			break;
 	}
-	cpp_int num(inp);
+	cpp_int num("0x"+inp);
 	string prefix(leading_zeros, '1');
 	string result = "";
 
@@ -126,7 +126,9 @@ inline string hash160(string inp)
 	unsigned char* val = new unsigned char[inp.length() + 1];
 	strcpy((char*)val, inp.c_str());
 
-	unsigned char hash[sizeof(val) + 1];
+	unsigned char* hash = new unsigned char[sizeof(val) + 25];
+
+//	unsigned char hash[sizeof(val) + 1];
 	ripemd160(val, sizeof(val), hash);
 	string result = uint8_to_hex_string(hash, sizeof(hash));
 	return result;
@@ -134,6 +136,8 @@ inline string hash160(string inp)
 
 inline string base58_checksum(string inp)
 {
-	return encode_base58(inp + hash256(inp).substr(0, 8));
+	string hash_result = hash256(inp);
+	string result = inp + hash_result.substr(0, 8);
+	return encode_base58(result);
 }
 #endif // !HELPER_H
