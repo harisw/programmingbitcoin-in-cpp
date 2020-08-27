@@ -54,6 +54,12 @@ bool S256Point::operator==(const S256Point& operand)
 		&& this->a == operand.a && this->b == operand.b;
 }
 
+bool S256Point::operator!=(const S256Point& operand)
+{
+	return !(this->x == operand.x && this->y == operand.y
+		&& this->a == operand.a && this->b == operand.b);
+}
+
 S256Point S256Point::operator+(S256Point& operand)
 {
  	if (this->a != operand.a || this->b != operand.b)
@@ -104,9 +110,19 @@ S256Point S256Point::operator+(S256Point& operand)
 
 S256Point S256Point::operator*(cpp_int scalar)
 {
+	//S256Point result = S256Point((cpp_int)0, (cpp_int)0, this->a, this->b);
+	//for (int j = 1; j <= scalar; j++) {
+	//	result = result + *this;
+	//}
+	//return result;
+
 	S256Point result = S256Point((cpp_int)0, (cpp_int)0, this->a, this->b);
-	for (int j = 1; j <= scalar; j++) {
-		result = result + *this;
+	S256Point current = *this;
+	while (scalar) {
+		if (scalar & 1)
+			result = result + current;
+		current = current + current;
+		scalar >>= 1;
 	}
 	return result;
 }

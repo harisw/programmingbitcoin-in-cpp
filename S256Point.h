@@ -18,6 +18,7 @@ public:
 	S256Point(S256Field x, S256Field y, S256Field  a, S256Field  b);
 	S256Point(cpp_int x, cpp_int y);
 	bool operator==(const S256Point& operand);
+	bool operator!=(const S256Point& operand);
 	S256Point operator+(S256Point& operand);
 	S256Point operator*(cpp_int  scalar);
 	friend S256Point operator*(cpp_int lhs, S256Point& rhs);
