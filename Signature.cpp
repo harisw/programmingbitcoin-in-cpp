@@ -23,7 +23,8 @@ string Signature::der()
 	rbin.erase(0, min(rbin.find_first_not_of('0'), rbin.size() - 1));		//REMOVE LEADING ZEROS
 	if (stoi(rbin.substr(0, 2)) & 0x80)
 		rbin = "00" + rbin;
-	result = to_string((rbin.length()/2)) + rbin;
+	rbin = "02" + to_string((rbin.length() / 2)) + rbin;
+	result = rbin;
 	
 	cout << "RBIN : " << result << endl;
 
@@ -32,8 +33,9 @@ string Signature::der()
 	if (stoi(sbin.substr(0, 2)) & 0x80)
 		sbin = "00" + sbin;
 	cout << "SBIN : " << to_string((sbin.length() / 2)) + sbin << endl;
-	result = result + to_string((sbin.length() / 2)) + sbin;
-
+	sbin = "02" + to_string((sbin.length() / 2)) + sbin;
+	
+	result = result + sbin;
 	result = "30" + to_string((result.length() / 2)) + result;
 	return result;
 }
