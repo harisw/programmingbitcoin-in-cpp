@@ -94,10 +94,10 @@ S256Field S256Field::operator/(const S256Field& operand)
 
 	if (this->prime != operand.prime)
 		throw("Cannot add two numbers in different field");
-	cpp_int exp = this->prime - 2;
-	cpp_int temp = ipow(operand.num, exp, this->prime);
 
- 	cpp_int result = (this->num * temp) % this->prime;
+	cpp_int denominator = ipow(operand.num, (this->prime - 2), this->prime);
+
+ 	cpp_int result = (this->num * denominator) % this->prime;
 	
 	return S256Field(result, this->prime);
 }

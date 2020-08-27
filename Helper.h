@@ -144,8 +144,7 @@ inline string hash160(string inp)
 inline string base58_checksum(string inp)
 {
 	string hash_result = hash256(inp);
-	cout << "INP : " << inp << endl;
-	cout << "HASH256: " << hash_result << endl;
+
 	string result = inp + hash_result.substr(0, 8);
 	return encode_base58(result);
 }
