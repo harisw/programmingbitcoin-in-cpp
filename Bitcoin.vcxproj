@@ -154,8 +154,11 @@
     <ClCompile Include="ripemd160.cpp" />
     <ClCompile Include="S256Field.cpp" />
     <ClCompile Include="S256Point.cpp" />
+    <ClCompile Include="Script.cpp" />
     <ClCompile Include="SHA256.cpp" />
     <ClCompile Include="Signature.cpp" />
+    <ClCompile Include="TxIn.cpp" />
+    <ClCompile Include="TxOut.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Helper.h" />
@@ -163,8 +166,11 @@
     <ClInclude Include="ripemd160.h" />
     <ClInclude Include="S256Field.h" />
     <ClInclude Include="S256Point.h" />
+    <ClInclude Include="Script.h" />
     <ClInclude Include="SHA256.h" />
     <ClInclude Include="Signature.h" />
+    <ClInclude Include="TxIn.h" />
+    <ClInclude Include="TxOut.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
