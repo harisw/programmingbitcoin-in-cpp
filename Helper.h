@@ -64,6 +64,28 @@ inline string dec_to_hex_byte(cpp_int num, int width = 0)
 	return stream.str();
 }
 
+inline string byte_to_little_endian(string inp)
+{
+	string result = "";
+
+	for (int j = inp.size() - 1; j > 0; j -= 2) {
+		result += inp[j - 1];
+		result += inp[j];
+	}
+	return result;
+
+}
+
+inline cpp_int little_endian_to_int(string inp)
+{
+	string result = "";
+
+	for (int j = inp.size() - 1; j > 0; j -= 2) {
+		result += inp[j - 1];
+		result += inp[j];
+	}
+	return cpp_int("0x" + result);
+}
 inline string int_to_byte(string inp, int byte_size)
 {
 	string result = inp;
@@ -73,18 +95,18 @@ inline string int_to_byte(string inp, int byte_size)
 	return result;
 }
 
-inline string reverse_endian(string val)
-{
-	string result = "";
-	int pos = 0;
-
-	for (int j = val.size() - 1; j > 0; j -= 2) {
-		result += val[j - 1];
-		result += val[j];
-		pos += 2;
-	}
-	return result;
-}
+//inline string reverse_endian(string val)
+//{
+//	string result = "";
+//	int pos = 0;
+//
+//	for (int j = val.size() - 1; j > 0; j -= 2) {
+//		result += val[j - 1];
+//		result += val[j];
+//		pos += 2;
+//	}
+//	return result;
+//}
 
 inline string encode_base58(string inp)
 {
@@ -147,5 +169,35 @@ inline string base58_checksum(string inp)
 
 	string result = inp + hash_result.substr(0, 8);
 	return encode_base58(result);
+}
+
+
+inline string encode_varint(cpp_int inp)
+{
+	if (inp < 0xfd)
+		return dec_to_hex_byte(inp);
+	else if (inp < 0x10000)
+		return "fd" + byte_to_little_endian(dec_to_hex_byte(inp, 2));
+	else if (inp < 0x100000000)
+		return "fe" + byte_to_little_endian(dec_to_hex_byte(inp, 4));
+	else if (inp < cpp_int("0x10000000000000000"))
+		return "ff" + byte_to_little_endian(dec_to_hex_byte(inp, 8));
+	
+	throw("Integer too large");
+}
+
+inline cpp_int read_varint(string inp)
+{ 
+	string first_byte = inp.substr(0, 2);
+	string rest_bytes = inp.substr(2);
+
+	if (first_byte == "fd")
+		return little_endian_to_int(rest_bytes.substr(0, 4));
+	else if (first_byte == "fe")
+		return little_endian_to_int(rest_bytes.substr(0, 8));
+	else if (first_byte == "fe")
+		return little_endian_to_int(rest_bytes.substr(0, 16));
+	else
+		return cpp_int(first_byte);
 }
 #endif // !HELPER_H
