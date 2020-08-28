@@ -157,6 +157,7 @@
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="SHA256.cpp" />
     <ClCompile Include="Signature.cpp" />
+    <ClCompile Include="Tx.cpp" />
     <ClCompile Include="TxIn.cpp" />
     <ClCompile Include="TxOut.cpp" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="Script.h" />
     <ClInclude Include="SHA256.h" />
     <ClInclude Include="Signature.h" />
+    <ClInclude Include="Tx.h" />
     <ClInclude Include="TxIn.h" />
     <ClInclude Include="TxOut.h" />
   </ItemGroup>

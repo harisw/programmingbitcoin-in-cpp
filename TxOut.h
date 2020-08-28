@@ -11,7 +11,7 @@ private:
 	Script script_pubkey;
 public:
 	TxOut();
-	TxOut(string input_stream);
+	TxOut(string &input_stream);
 	string serialize();
 };
 

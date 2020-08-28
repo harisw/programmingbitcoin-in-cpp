@@ -4,13 +4,39 @@
 #include "S256Point.h"
 #include "PrivateKey.h"
 
+S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
+    cpp_int{ "0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8" });
+
+void ecc_test()
+{
+    cout << string('<', 10) << " ELLIPTIC CURVE CRYPTOGRAPHY " << string('>', 10) << endl << endl;
+    cout << "Generator Point : " << endl;
+
+    cout << "x = " << genPoint.getX().getNum() << endl;
+    cout << "y = " << genPoint.getY().getNum() << endl;
+    cout << "prime = " << genPoint.getY().getPrime() << endl;
+    S256Point multiplied = 13 * genPoint;
+    cout << "Scalar multiplication (13 * genPoint) = (" << multiplied.getX().getNum() << ",  " << multiplied.getY().getNum() << ")" << endl;
+
+
+    cout << "Private Key(5003) : " << endl;
+    PrivateKey priv_key = PrivateKey(5003);
+    cpp_int z("0x"+sha256("Learning bitcoin"));
+    cout << "z : " << z << endl;
+    Signature example_sign = priv_key.sign(z);
+    cout << "Signature DER : " << example_sign.der() << endl;
+    cout << "Verification : " << priv_key.pub_key.verify(z, example_sign) << endl;
+}
+
+void serialization_test()
+{
+
+}
+
 int main()
 {
-    //S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
-    //    cpp_int{ "0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8" });
-    //cout << "x = " << genPoint.getX().getNum() << endl;
-    //cout << "y = " << genPoint.getY().getNum() << endl;
-    //cout << "prime = " << genPoint.getY().getPrime() << endl;
+    ecc_test();
+
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");    
 
     /*a 32-bit hexadecimal number*/
@@ -28,7 +54,7 @@ int main()
     Signature example = Signature(cpp_int{ "0x37206a0610995c58074999cb9767b87af4c4978db68c06e8e6e81d282047a7c6" },
             cpp_int{ "0x8ca63759c1157ebeaec0d03cecca119fc9a75bf8e6d0fa65c841c8e2738cdaec" });
     cout << "DER : " << example.der() << endl;
-    PrivateKey priv_key = PrivateKey(1000);
+    PrivateKey priv_key = PrivateKey(5003);
     //cout << "SEC : " << priv_key.pub_key.sec(false) << endl << endl;
     /*cout << "Private Key X : " << dec_to_hex_byte(priv_key.pub_key.getX().getNum()) << endl;
     cout << "Private Key Y : " << dec_to_hex_byte(priv_key.pub_key.getY().getNum()) << endl<<endl;*/

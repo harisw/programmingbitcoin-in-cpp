@@ -9,17 +9,16 @@ TxIn::TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig, cp
 
 }
 
-TxIn::TxIn(string inp)
+TxIn::TxIn(string &inp_stream)
 {
-	string rest_inp;
-	this->prev_tx = inp.substr(0, 64);
-	rest_inp = inp.substr(64);
+	this->prev_tx = inp_stream.substr(0, 64);
+	inp_stream.erase(0, 64);
 
-	this->prev_index = cpp_int("0x"+rest_inp.substr(0, 8));
-	rest_inp = inp.substr(8);
+	this->prev_index = cpp_int("0x"+inp_stream.substr(0, 8));
+	inp_stream.erase(0, 8);
 
-	this->script_sig = Script(rest_inp);
-	this->sequence = cpp_int(rest_inp);
+	this->script_sig = Script(inp_stream);
+	this->sequence = cpp_int(inp_stream);
 }
 
 string TxIn::serialize()

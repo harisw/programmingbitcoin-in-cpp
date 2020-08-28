@@ -12,7 +12,7 @@ private:
 	Script script_sig;
 	cpp_int sequence;
 public:
-	TxIn(string inp);
+	TxIn(string &inp_stream);
 	TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig = "", cpp_int inp_sequence = 0xffffffff);
 	string serialize();
 };
