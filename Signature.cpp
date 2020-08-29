@@ -27,15 +27,13 @@ string Signature::der()
 		rbin = "00" + rbin;
 	rbin = "02" + to_string((rbin.length() / 2)) + rbin;
 	result = rbin;
-	
-	cout << "RBIN : " << result << endl;
 
 	string sbin = dec_to_hex_byte(this->s, 32);
 	sbin.erase(0, min(sbin.find_first_not_of('0'), sbin.size() - 1));		//REMOVE LEADING ZEROS
 	first_byte = cpp_int("0x" + sbin.substr(0, 2));
 	if (first_byte & 0x80)
 		sbin = "00" + sbin;
-	cout << "SBIN : " << to_string((sbin.length() / 2)) + sbin << endl;
+
 	sbin = "02" + to_string((sbin.length() / 2)) + sbin;
 	
 	result = result + sbin;
