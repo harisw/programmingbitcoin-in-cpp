@@ -188,16 +188,18 @@ inline string encode_varint(cpp_int inp)
 
 inline cpp_int read_varint(string inp)
 { 
+	if (inp.length() == 0)
+		return 0;
 	string first_byte = inp.substr(0, 2);
 	string rest_bytes = inp.substr(2);
 
 	if (first_byte == "fd")
-		return little_endian_to_int(rest_bytes.substr(0, 4));
+		return little_endian_to_int("0x"+rest_bytes.substr(0, 4));
 	else if (first_byte == "fe")
-		return little_endian_to_int(rest_bytes.substr(0, 8));
+		return little_endian_to_int("0x" + rest_bytes.substr(0, 8));
 	else if (first_byte == "fe")
-		return little_endian_to_int(rest_bytes.substr(0, 16));
+		return little_endian_to_int("0x" + rest_bytes.substr(0, 16));
 	else
-		return cpp_int(first_byte);
+		return cpp_int("0x" + first_byte);
 }
 #endif // !HELPER_H

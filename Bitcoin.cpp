@@ -3,7 +3,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "S256Point.h"
 #include "PrivateKey.h"
-
+#include "Tx.h"
 S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
     cpp_int{ "0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8" });
 
@@ -12,7 +12,7 @@ string suffix = ">>>>>>>>>>";
 void ecc_test()
 {
 
-    cout << prefix << " ELLIPTIC CURVE CRYPTOGRAPHY " << suffix << endl << endl;
+    cout << prefix << "  ELLIPTIC CURVE CRYPTOGRAPHY  " << suffix << endl << endl;
     cout << "Generator Point : " << endl;
 
     cout << "x = " << genPoint.getX().getNum() << endl;
@@ -34,7 +34,7 @@ void ecc_test()
 
 void serialization_test()
 {
-    cout << prefix << " SERIALIZATION " << suffix << endl << endl;
+    cout << prefix << "  SERIALIZATION  " << suffix << endl << endl;
 
     cout << "Private Key(5003) : " << endl;
     PrivateKey priv_key = PrivateKey(5003);
@@ -58,60 +58,17 @@ void serialization_test()
 
 }
 
+void transaction_test()
+{
+    cout << prefix << "  TRANSACTION  " << suffix << endl << endl;
+    string hex_trans = "010000000456919960ac691763688d3d3bcea9ad6ecaf875df5339e148a1fc61c6ed7a069e010000006a47304402204585bcdef85e6b1c6af5c2669d4830ff86e42dd205c0e089bc2a821657e951c002201024a10366077f87d6bce1f7100ad8cfa8a064b39d4e8fe4ea13a7b71aa8180f012102f0da57e85eec2934a82a585ea337ce2f4998b50ae699dd79f5880e253dafafb7feffffffeb8f51f4038dc17e6313cf831d4f02281c2a468bde0fafd37f1bf882729e7fd3000000006a47304402207899531a52d59a6de200179928ca900254a36b8dff8bb75f5f5d71b1cdc26125022008b422690b8461cb52c3cc30330b23d574351872b7c361e9aae3649071c1a7160121035d5c93d9ac96881f19ba1f686f15f009ded7c62efe85a872e6a19b43c15a2937feffffff567bf40595119d1bb8a3037c356efd56170b64cbcc160fb028fa10704b45d775000000006a47304402204c7c7818424c7f7911da6cddc59655a70af1cb5eaf17c69dadbfc74ffa0b662f02207599e08bc8023693ad4e9527dc42c34210f7a7d1d1ddfc8492b654a11e7620a0012102158b46fbdff65d0172b7989aec8850aa0dae49abfb84c81ae6e5b251a58ace5cfeffffffd63a5e6c16e620f86f375925b21cabaf736c779f88fd04dcad51d26690f7f345010000006a47304402200633ea0d3314bea0d95b3cd8dadb2ef79ea8331ffe1e61f762c0f6daea0fabde022029f23b3e9c30f080446150b23852028751635dcee2be669c2a1686a4b5edf304012103ffd6f4a67e94aba353a00882e563ff2722eb4cff0ad6006e86ee20dfe7520d55feffffff0251430f00000000001976a914ab0c0b2e98b1ab6dbf67d4750b0a56244948a87988ac005a6202000000001976a9143c82d7df364eb6c75be8c80df2b3eda8db57397088ac46430600";
+    Tx trans = Tx(hex_trans, true);
+}
 int main()
 {
-    ecc_test();
-    serialization_test();
-    //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");    
-
-    /*a 32-bit hexadecimal number*/
-    //cpp_int x("0x175e3");
-    //cpp_int x(1234567891011121314);
-    //cout << x << endl;
-    //string bytearr = int_to_byte(x, 32);
-
-    //cout << bytearr << endl;
-
-    //string reversed_byte = reverse_endian(bytearr);
-    //
-    //cout << reversed_byte << endl;
-
-    Signature example = Signature(cpp_int{ "0x37206a0610995c58074999cb9767b87af4c4978db68c06e8e6e81d282047a7c6" },
-            cpp_int{ "0x8ca63759c1157ebeaec0d03cecca119fc9a75bf8e6d0fa65c841c8e2738cdaec" });
-    cout << "DER : " << example.der() << endl;
-    PrivateKey priv_key = PrivateKey(5003);
-    //cout << "SEC : " << priv_key.pub_key.sec(false) << endl << endl;
-    /*cout << "Private Key X : " << dec_to_hex_byte(priv_key.pub_key.getX().getNum()) << endl;
-    cout << "Private Key Y : " << dec_to_hex_byte(priv_key.pub_key.getY().getNum()) << endl<<endl;*/
-    cout << "Address : " << priv_key.pub_key.address(true, true) << endl;
-    cout << "Address : " << priv_key.wif(true, true) << endl;
-    //cout << PrivateKey(5000).pub_key.address(false, true) << endl;
-    //S256Field num1 = S256Field(190, 223);
-    //S256Field num2 = S256Field(7, 223);
-    //
-    //S256Field res = num1 + num2;
-    //cout << num1.getNum() << " + " << num2.getNum() << " = " << res.getNum() << endl;
-
-    //res = num1 - num2;
-    //cout << num1.getNum() << " - " << num2.getNum() << " = " << res.getNum() << endl;
-
-    //res = num1 * num2;
-    //cout << num1.getNum() << " * " << num2.getNum() << " = " << res.getNum() << endl;
-
-    //res = num1 ^ 32;
-    //cout << num1.getNum() << " ^ 32" << " = " << res.getNum() << endl;
-
-    //res = num1 / num2;
-    //cout << num1.getNum() << " / " << num2.getNum() << " = " << res.getNum() << endl;
-
-    //int prime = 223;
-    //S256Field x = S256Field(47, prime);
-    //S256Field y = S256Field(71, prime);
-    //S256Field a = S256Field(0, prime);
-    //S256Field b = S256Field(7, prime);
-    //S256Point finitePoint = S256Point(x, y, a, b);
-    //finitePoint = finitePoint*20;    
-
-    //cout << "Point : (" << finitePoint.getX().getNum() << " , " << finitePoint.getX().getNum() << ")" << endl;
+    //ecc_test();
+    //serialization_test();
+    transaction_test();
+    //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
 
 }

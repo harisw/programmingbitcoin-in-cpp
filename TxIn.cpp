@@ -18,7 +18,7 @@ TxIn::TxIn(string &inp_stream)
 	inp_stream.erase(0, 8);
 
 	this->script_sig = Script(inp_stream);
-	this->sequence = cpp_int(inp_stream);
+	this->sequence = cpp_int("0x"+inp_stream);
 }
 
 string TxIn::serialize()
