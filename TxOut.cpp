@@ -21,3 +21,8 @@ string TxOut::serialize()
 
 	return result;
 }
+
+void TxOut::print()
+{
+	cout << this->amount << "  :  " << endl;
+}

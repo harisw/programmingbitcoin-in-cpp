@@ -86,6 +86,18 @@ inline cpp_int little_endian_to_int(string inp)
 	}
 	return cpp_int("0x" + result);
 }
+
+inline string little_endian_to_byte(string inp)
+{
+	string result = "";
+
+	for (int j = inp.size() - 1; j > 0; j -= 2) {
+		result += inp[j - 1];
+		result += inp[j];
+	}
+	return result;
+}
+
 inline string int_to_byte(string inp, int byte_size)
 {
 	string result = inp;
@@ -186,20 +198,29 @@ inline string encode_varint(cpp_int inp)
 	throw("Integer too large");
 }
 
-inline cpp_int read_varint(string inp)
+inline cpp_int read_varint(string &inp_stream)
 { 
-	if (inp.length() == 0)
-		return 0;
-	string first_byte = inp.substr(0, 2);
-	string rest_bytes = inp.substr(2);
 
-	if (first_byte == "fd")
-		return little_endian_to_int("0x"+rest_bytes.substr(0, 4));
-	else if (first_byte == "fe")
-		return little_endian_to_int("0x" + rest_bytes.substr(0, 8));
-	else if (first_byte == "fe")
-		return little_endian_to_int("0x" + rest_bytes.substr(0, 16));
-	else
-		return cpp_int("0x" + first_byte);
+	string first_byte = inp_stream.substr(0, 2);
+	inp_stream.erase(0, 2);
+	string result = "0x";
+	if (first_byte == "fd") {
+		result += inp_stream.substr(0, 4);
+		inp_stream.erase(0, 4);
+		return little_endian_to_int(result);
+	}
+	else if (first_byte == "fe") {
+		result += inp_stream.substr(0, 8);
+		inp_stream.erase(0, 8);
+		return little_endian_to_int(result);
+	}
+	else if (first_byte == "fe") {
+		result += inp_stream.substr(0, 16);
+		inp_stream.erase(0, 16);
+		return little_endian_to_int(result);
+	}
+	else {
+		return cpp_int(result + first_byte);
+	}
 }
 #endif // !HELPER_H

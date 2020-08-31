@@ -6,13 +6,16 @@
 
 class TxOut
 {
-private:
+//private:
+//	cpp_int amount;
+//	Script script_pubkey;
+public:
 	cpp_int amount;
 	Script script_pubkey;
-public:
 	TxOut();
 	TxOut(string &input_stream);
 	string serialize();
+	void print();
 };
 
 #endif // !TX_OUT_H

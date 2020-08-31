@@ -8,13 +8,13 @@
 
 class Tx
 {
-private:
+public:
 	cpp_int version;
 	vector<TxIn> tx_ins;
 	vector<TxOut> tx_outs;
 	cpp_int locktime;
 	bool testnet;
-public:
+
 	Tx();
 	Tx(string input_stream, bool testnet = false);
 	string id();

@@ -9,17 +9,24 @@ TxIn::TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig, cp
 
 }
 
+void TxIn::print()
+{
+	cout << this->prev_tx << "  :  " << this->prev_index << endl;
+}
+
 TxIn::TxIn(string &inp_stream)
 {
-	this->prev_tx = inp_stream.substr(0, 64);
+	this->prev_tx = little_endian_to_byte(inp_stream.substr(0, 64));
 	inp_stream.erase(0, 64);
 
-	this->prev_index = cpp_int("0x"+inp_stream.substr(0, 8));
+	this->prev_index = little_endian_to_int(inp_stream.substr(0, 8));
 	inp_stream.erase(0, 8);
 
 	this->script_sig = Script(inp_stream);
-	this->sequence = cpp_int("0x"+inp_stream);
+	this->sequence = little_endian_to_int(inp_stream.substr(0, 8));
+	inp_stream.erase(0, 8);
 }
+
 
 string TxIn::serialize()
 {
