@@ -5,7 +5,6 @@
 #include "Helper.h"
 #include "TxIn.h"
 #include "TxOut.h"
-
 class Tx
 {
 public:
@@ -20,6 +19,7 @@ public:
 	string id();
 	string hash();
 	string serialize();
+	cpp_int fee();
 };
 
 #endif // !TX_H

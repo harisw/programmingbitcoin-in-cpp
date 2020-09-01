@@ -20,6 +20,8 @@ public:
 	TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig = "", cpp_int inp_sequence = 0xffffffff);
 	void print();
 	string serialize();
+	string fetch_tx(bool testnet = false);
+	cpp_int value();
 };
 
 

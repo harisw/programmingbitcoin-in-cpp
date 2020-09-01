@@ -55,3 +55,15 @@ string Tx::serialize()
 
 	return result;
 }
+
+cpp_int Tx::fee()
+{
+	cpp_int input_sum = 0;
+	cpp_int output_sum = 0;
+
+	vector<TxIn>::iterator it_in;
+	//for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++) {
+	//	input_sum += it_in->
+	//}
+	return cpp_int();
+}

@@ -42,3 +42,14 @@ string TxIn::serialize()
 
 	return string();
 }
+
+string TxIn::fetch_tx(bool testnet)
+{
+	return string();
+}
+
+cpp_int TxIn::value()
+{
+
+	return cpp_int();
+}
