@@ -1,10 +1,15 @@
+#include "TxIn.h"
+#include "TxOut.h"
+
 #pragma once
 #ifndef TX_H
 #define TX_H
 
 #include "Helper.h"
-#include "TxIn.h"
-#include "TxOut.h"
+
+class TxIn;
+class TxOut;
+
 class Tx
 {
 public:
@@ -17,7 +22,7 @@ public:
 	Tx();
 	Tx(string input_stream, bool testnet = false);
 	string id();
-	string hash();
+	cpp_int hash();
 	string serialize();
 	cpp_int fee();
 };

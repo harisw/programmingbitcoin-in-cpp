@@ -65,12 +65,13 @@ void transaction_test()
     Tx trans = Tx(hex_trans, true);
     cout << "First input (prev_tx) : " << trans.tx_ins.front().prev_tx << endl;
     cout << "Last output (amount) : " << trans.tx_outs.back().amount << endl;
+    cout << "Tx Fee : " << trans.fee() << endl;
 }
 
 int main()
 {
-    ecc_test();
-    serialization_test();
+    /*ecc_test();
+    serialization_test();*/
     transaction_test();
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
 

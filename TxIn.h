@@ -1,12 +1,19 @@
+#pragma comment(lib, "urlmon.lib")
+
 #pragma once
 #ifndef TX_IN_H
 #define TX_IN_H
-#include "Helper.h"
 #include "Script.h"
+#include <urlmon.h>
+#include <WinInet.h>
+
+class Tx;
 
 class TxIn
 {
-//private:
+private:
+	static wstring testnet_url;
+	static wstring mainnet_url;
 //	string prev_tx;
 //	cpp_int prev_index;
 //	Script script_sig;
@@ -20,9 +27,10 @@ public:
 	TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig = "", cpp_int inp_sequence = 0xffffffff);
 	void print();
 	string serialize();
-	string fetch_tx(bool testnet = false);
-	cpp_int value();
+	Tx fetch_tx(bool testnet = false);
+	cpp_int value(bool testnet = false);
 };
 
+#include "Tx.h"
 
 #endif // !TX_IN_H

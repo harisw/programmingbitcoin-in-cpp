@@ -28,11 +28,11 @@ string Tx::id()
 	return stream.str();
 }
 
-string Tx::hash()
+cpp_int Tx::hash()
 {
 	string hash_result = hash256(this->serialize());
-
-	return string(hash_result.rbegin(), hash_result.rend());
+	hash_result = string(hash_result.rbegin(), hash_result.rend());
+	return cpp_int("0x"+hash_result);
 }
 
 string Tx::serialize()
@@ -52,7 +52,8 @@ string Tx::serialize()
 	for (it_out = this->tx_outs.begin(); it_out != this->tx_outs.end(); it_out++) {
 		result += it_out->serialize();
 	}
-
+	
+	result += byte_to_little_endian(dec_to_hex_byte(this->locktime, 4));
 	return result;
 }
 
@@ -62,8 +63,13 @@ cpp_int Tx::fee()
 	cpp_int output_sum = 0;
 
 	vector<TxIn>::iterator it_in;
-	//for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++) {
-	//	input_sum += it_in->
-	//}
-	return cpp_int();
+	for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++) {
+		input_sum += it_in->value(this->testnet);
+	}
+
+	vector<TxOut>::iterator it_out;
+	for (it_out = this->tx_outs.begin(); it_out != this->tx_outs.end(); it_out++) {
+		output_sum += it_out->amount;
+	}
+	return input_sum - output_sum;
 }

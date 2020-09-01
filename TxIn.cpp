@@ -1,5 +1,8 @@
 #include "TxIn.h"
 
+wstring TxIn::testnet_url = L"http://testnet.programmingbitcoin.com/tx/";
+wstring TxIn::mainnet_url = L"http://mainnet.programmingbitcoin.com/tx/";
+
 TxIn::TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig, cpp_int inp_sequence)
 {
 	this->prev_tx = inp_prev_tx;
@@ -34,22 +37,71 @@ string TxIn::serialize()
 
 	result = string(this->prev_tx.rbegin(), this->prev_tx.rend());
 
-	result += byte_to_little_endian(dec_to_hex_byte(this->prev_index, 4));
+	result += byte_to_little_endian(dec_to_hex_byte(this->prev_index, 8));
 
 	result += this->script_sig.serialize();
 
-	result += byte_to_little_endian(dec_to_hex_byte(this->sequence, 4));
+	result += byte_to_little_endian(dec_to_hex_byte(this->sequence, 8));
 
 	return string();
 }
 
-string TxIn::fetch_tx(bool testnet)
+Tx TxIn::fetch_tx(bool testnet)
 {
-	return string();
+	string tx_id = this->prev_tx;
+	IStream* stream;
+	wstring temp_url = testnet ? this->testnet_url : this->mainnet_url;
+
+	string tx_url = tx_id + ".hex";
+	temp_url += wstring(tx_url.cbegin(), tx_url.cend());
+	LPCWSTR url = temp_url.c_str();
+
+	HRESULT result = URLOpenBlockingStream(0, url, &stream, 0, 0);
+	if (result != 0)
+	{
+		throw("Http Fetching Error");
+	}
+	char buffer[100];
+	unsigned long bytesRead;
+	stringstream ss;
+	stream->Read(buffer, 100, &bytesRead);
+	while (bytesRead > 0U)
+	{
+		ss.write(buffer, (long long)bytesRead);
+		stream->Read(buffer, 100, &bytesRead);
+	}
+	stream->Release();
+	string raw = ss.str();
+	Tx result_tx;
+	try
+	{
+		string result;
+
+		if (raw[4] == 0) {
+			result = raw.substr(0, 4) + raw.substr(6);
+			result_tx = Tx(result, testnet);
+
+			string locktime = string(result.rbegin(), result.rend());
+			result_tx.locktime = little_endian_to_int(locktime.substr(4));
+		}
+		else {
+			result_tx = Tx(result, testnet);
+		}
+		cout << result_tx.id() << endl << endl;
+		cout << tx_id << endl;
+		if (result_tx.id() != tx_id)
+			throw("Tx ID is not the same!");
+	}
+	catch (int e)
+	{
+		cout << "Exception occured, Exception " << e << endl;
+	}
+	return result_tx;
 }
 
-cpp_int TxIn::value()
+cpp_int TxIn::value(bool testnet)
 {
+	Tx prev_transaction = this->fetch_tx(testnet);
 
-	return cpp_int();
+	return prev_transaction.tx_outs[this->prev_index.convert_to<int>()].amount;
 }

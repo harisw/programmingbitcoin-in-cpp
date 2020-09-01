@@ -52,9 +52,9 @@ Script::Script(string& inp)
 		throw("Parsing failed");
 }
 
-void Script::parse(string& inp)
+string Script::raw_serialize()
 {
-
+	return string();
 }
 
 string Script::serialize()

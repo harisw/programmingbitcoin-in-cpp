@@ -15,7 +15,7 @@ TxOut::TxOut(string &input_stream)
 string TxOut::serialize()
 {
 	string result = "";
-	result = byte_to_little_endian(dec_to_hex_byte(this->amount, 8));
+	result = byte_to_little_endian(dec_to_hex_byte(this->amount, 16));
 
 	result += this->script_pubkey.serialize();
 

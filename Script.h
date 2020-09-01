@@ -11,7 +11,7 @@ private:
 public:
 	Script();
 	Script(string &inp_cmds);
-	void parse(string &inp);
+	string raw_serialize();
 	string serialize();
 };
 
