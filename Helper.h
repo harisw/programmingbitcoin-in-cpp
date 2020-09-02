@@ -1,7 +1,7 @@
 #pragma once
 #ifndef HELPER_H
 #define HELPER_H
-
+#define BYTE_MULTIPLIER 2
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cmath>
@@ -79,7 +79,10 @@ inline string byte_to_little_endian(string inp)
 inline cpp_int little_endian_to_int(string inp)
 {
 	string result = "";
-
+	
+	if (inp.substr(0, 2) == "0x")
+		inp.erase(0, 2);
+	
 	for (int j = inp.size() - 1; j > 0; j -= 2) {
 		result += inp[j - 1];
 		result += inp[j];

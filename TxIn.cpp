@@ -85,7 +85,7 @@ Tx TxIn::fetch_tx(bool testnet)
 			result_tx.locktime = little_endian_to_int(locktime.substr(4));
 		}
 		else {
-			result_tx = Tx(result, testnet);
+			result_tx = Tx(raw, testnet);
 		}
 		cout << result_tx.id() << endl << endl;
 		cout << tx_id << endl;
