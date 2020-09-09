@@ -61,22 +61,25 @@ Tx TxIn::fetch_tx(bool testnet)
 	{
 		throw("Http Fetching Error");
 	}
-	char buffer[100];
+	char buffer[500];
 	unsigned long bytesRead;
 	stringstream ss;
-	stream->Read(buffer, 100, &bytesRead);
+	stream->Read(buffer, 500, &bytesRead);
 	while (bytesRead > 0U)
 	{
 		ss.write(buffer, (long long)bytesRead);
-		stream->Read(buffer, 100, &bytesRead);
+		stream->Read(buffer, 500, &bytesRead);
 	}
 	stream->Release();
 	string raw = ss.str();
 	Tx result_tx;
+	ofstream out("output.txt");
 	try
 	{
+		algorithm::trim(raw);
 		string result;
-
+		out << raw;
+		out.close();
 		if (raw[4] == 0) {
 			result = raw.substr(0, 4) + raw.substr(6);
 			result_tx = Tx(result, testnet);
@@ -87,8 +90,8 @@ Tx TxIn::fetch_tx(bool testnet)
 		else {
 			result_tx = Tx(raw, testnet);
 		}
-		cout << result_tx.id() << endl << endl;
-		cout << tx_id << endl;
+		cout << "RESULT_TX : " << result_tx.id() << endl;
+		cout << "TX_ID : " << tx_id << endl;
 		if (result_tx.id() != tx_id)
 			throw("Tx ID is not the same!");
 	}

@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bitcoin.cpp" />
+    <ClCompile Include="Op.cpp" />
     <ClCompile Include="PrivateKey.cpp" />
     <ClCompile Include="ripemd160.cpp" />
     <ClCompile Include="S256Field.cpp" />
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="Op.h" />
     <ClInclude Include="PrivateKey.h" />
     <ClInclude Include="ripemd160.h" />
     <ClInclude Include="S256Field.h" />

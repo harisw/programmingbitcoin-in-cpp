@@ -68,11 +68,33 @@ void transaction_test()
     //cout << "Tx Fee : " << trans.fee() << endl;
 }
 
+void script_test()
+{
+    //Exercise 3
+    vector<string> first_script = { 
+        string("76"), string("76"), string("95"), string("93"), string("56"), string("87") };
+    vector<string> second_script = { string("52") };
+    Script script_pubkey = Script(first_script);
+    Script script_sig = Script(second_script);
+    Script result = script_sig + script_pubkey;
+    cout << "RESULT : " << result.evaluate(string("0")) << endl;
+
+    //Exercise 4
+    //first_script = {
+    //    string("76"), string("76"), string("95"), string("93"), string("56"), string("87") };
+    //second_script = { string("52") };
+    //Script script_pubkey = Script(first_script);
+    //Script script_sig = Script(second_script);
+    //Script result = script_sig + script_pubkey;
+    //cout << "RESULT : " << result.evaluate(string("0")) << endl;
+}
+
 int main()
 {
     /*ecc_test();
     serialization_test();*/
-    transaction_test();
+    //transaction_test();
+    script_test();
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
 
 }

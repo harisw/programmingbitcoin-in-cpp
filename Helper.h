@@ -4,8 +4,10 @@
 #define BYTE_MULTIPLIER 2
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
 #include "SHA256.h"
 #include "ripemd160.h"
@@ -64,6 +66,16 @@ inline string dec_to_hex_byte(cpp_int num, int width = 0)
 	return stream.str();
 }
 
+inline string reverse_byte(string inp)
+{
+	string result = "";
+
+	for (int j = inp.size() - 1; j > 0; j -= 2) {
+		result += inp[j - 1];
+		result += inp[j];
+	}
+	return result;
+}
 inline string byte_to_little_endian(string inp)
 {
 	string result = "";
@@ -224,6 +236,20 @@ inline cpp_int read_varint(string &inp_stream)
 	}
 	else {
 		return cpp_int(result + first_byte);
+	}
+}
+
+inline bool is_integer(string inp)
+{
+	try
+	{
+		lexical_cast<cpp_int>("0x"+inp);
+		return true;
+	}
+	catch (bad_lexical_cast&)
+	{
+		return false;
+		// if it throws, it's not a number.
 	}
 }
 #endif // !HELPER_H
