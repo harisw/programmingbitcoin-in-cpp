@@ -52,14 +52,6 @@ inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
 	return result;
 }
 
-//inline string dec_to_hex(cpp_int num, int width)
-//{
-//	stringstream stream;
-//	stream << hex << num;
-//	string result(stream.str());
-//	return result;
-//}
-
 inline string dec_to_hex_byte(cpp_int num, int width = 0)
 {
 	stringstream stream;
@@ -123,19 +115,6 @@ inline string int_to_byte(string inp, int byte_size)
 	result = string(zero_pad, '0').append(result);
 	return result;
 }
-
-//inline string reverse_endian(string val)
-//{
-//	string result = "";
-//	int pos = 0;
-//
-//	for (int j = val.size() - 1; j > 0; j -= 2) {
-//		result += val[j - 1];
-//		result += val[j];
-//		pos += 2;
-//	}
-//	return result;
-//}
 
 inline string encode_base58(string inp)
 {
