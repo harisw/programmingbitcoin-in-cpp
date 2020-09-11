@@ -24,11 +24,12 @@ public:
 	Script script_sig;
 	cpp_int sequence;
 	TxIn(string &inp_stream);
-	TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig = "", cpp_int inp_sequence = 0xffffffff);
+	TxIn(string inp_prev_tx, cpp_int inp_prev_index, Script inp_script_sig = Script(), cpp_int inp_sequence = 0xffffffff);
 	void print();
 	string serialize();
 	Tx fetch_tx(bool testnet = false);
 	cpp_int value(bool testnet = false);
+	Script script_pubkey(bool testnet = false);
 };
 
 #include "Tx.h"

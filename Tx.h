@@ -25,6 +25,9 @@ public:
 	cpp_int hash();
 	string serialize();
 	cpp_int fee();
+	bool verify();
+	bool verify_input(int input_index);
+	string sig_hash(int input_index);
 };
 
 #endif // !TX_H

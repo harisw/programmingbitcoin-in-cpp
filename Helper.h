@@ -15,7 +15,9 @@ using namespace std;
 using namespace boost;
 using boost::multiprecision::cpp_int;
 
-
+int SIGHASH_ALL = 1;
+int SIGHASH_NONE = 2;
+int SIGHASH_SINGLE = 3;
 inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
 {
 	cpp_int result = 1;

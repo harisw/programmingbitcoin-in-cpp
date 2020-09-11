@@ -73,3 +73,54 @@ cpp_int Tx::fee()
 	}
 	return input_sum - output_sum;
 }
+
+bool Tx::verify()
+{
+	if (this->fee() < 0)
+		return false;
+
+	for (int j = 0; j < this->tx_ins.size(); j++) {
+		if (!this->verify_input(j))
+			return false;
+	}
+	return true;
+}
+
+string Tx::sig_hash(int input_index)
+{
+	string s = byte_to_little_endian(dec_to_hex_byte(this->version, 4));
+
+	s += encode_varint(this->tx_ins.size());
+	vector<TxIn>::iterator it_in;
+	int index = 0;
+	for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++) {
+		if (index == input_index) {
+			s += TxIn(it_in->prev_tx, it_in->prev_index, it_in->script_pubkey(testnet), it_in->sequence).serialize();
+		}
+		else {
+			s += TxIn(it_in->prev_tx, it_in->prev_index, Script(), it_in->sequence).serialize();
+		}
+		index++;
+	}
+
+	s += encode_varint(this->tx_outs.size());
+	vector<TxOut>::iterator it_out;
+	index = 0;
+	for (it_out = this->tx_outs.begin(); it_out != this->tx_outs.end(); it_out++) {
+			s += it_out->serialize();
+	}
+	
+	s += byte_to_little_endian(dec_to_hex_byte(this->locktime, 4));
+	s += byte_to_little_endian(dec_to_hex_byte(SIGHASH_ALL, 4));
+	string h256 = hash256(s);
+	return h256;
+}
+
+bool Tx::verify_input(int input_index)
+{
+	TxIn curr_tx = this->tx_ins[input_index];
+	Script script_pubkey = curr_tx.script_pubkey(this->testnet);
+	string z = this->sig_hash(input_index);
+	Script script_combined = curr_tx.script_sig + script_pubkey;
+	return script_combined.evaluate(z);
+}

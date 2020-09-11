@@ -3,11 +3,11 @@
 wstring TxIn::testnet_url = L"http://testnet.programmingbitcoin.com/tx/";
 wstring TxIn::mainnet_url = L"http://mainnet.programmingbitcoin.com/tx/";
 
-TxIn::TxIn(string inp_prev_tx, cpp_int inp_prev_index, string inp_script_sig, cpp_int inp_sequence)
+TxIn::TxIn(string inp_prev_tx, cpp_int inp_prev_index, Script inp_script_sig, cpp_int inp_sequence)
 {
 	this->prev_tx = inp_prev_tx;
 	this->prev_index = inp_prev_index;
-	this->script_sig = inp_script_sig == "" ? Script() : inp_script_sig;
+	this->script_sig = inp_script_sig;
 	this->sequence = inp_sequence;
 
 }
@@ -107,4 +107,10 @@ cpp_int TxIn::value(bool testnet)
 	Tx prev_transaction = this->fetch_tx(testnet);
 
 	return prev_transaction.tx_outs[this->prev_index.convert_to<int>()].amount;
+}
+
+Script TxIn::script_pubkey(bool testnet)
+{
+	Tx prev_transaction = this->fetch_tx(testnet);
+	return prev_transaction.tx_outs.at((int)this->prev_index).script_pubkey;
 }
