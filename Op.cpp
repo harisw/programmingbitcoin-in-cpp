@@ -457,6 +457,14 @@ bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, 
 	return false;
 }
 
+Script Op::p2pkh_script(string h160)
+{
+	vector<string> input_cmds = {
+		string("0x76"), string("0xa9"), string("0xa9"), string("0x88"), string("0xac")
+	};
+	return Script(input_cmds);
+}
+
 map<int, string> Op::OP_CODE_NAMES = {
 	{0, "OP_0"},
 	{76, "OP_PUSHDATA1"},

@@ -1,23 +1,30 @@
-#pragma once
+//#pragma once
 #ifndef HELPER_H
 #define HELPER_H
+
 #define BYTE_MULTIPLIER 2
 #define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
-#include "SHA256.h"
 #include "ripemd160.h"
+#include "sha256.h"
+
+
 using namespace std;
 using namespace boost;
 using boost::multiprecision::cpp_int;
 
-int SIGHASH_ALL = 1;
-int SIGHASH_NONE = 2;
-int SIGHASH_SINGLE = 3;
+
+//int SIGHASH_ALL = 1;
+//int SIGHASH_NONE = 2;
+//int SIGHASH_SINGLE = 3;
+//string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
 inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
 {
 	cpp_int result = 1;
@@ -119,7 +126,6 @@ inline string int_to_byte(string inp, int byte_size)
 inline string encode_base58(string inp)
 {
 	string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
 	int leading_zeros = 0;
 	for (int j = 0; j < inp.length(); j++) {
 		if (inp[j] == '0')
@@ -142,8 +148,39 @@ inline string encode_base58(string inp)
 }
 
 inline string hash256(string inp)
+{	
+	reverse(inp.begin(), inp.end());
+	string first_hash = sha256::hash_hex(inp);
+	cout << "First hash256 : " << first_hash << endl;
+
+	string second_hash = sha256::hash_hex(first_hash);
+	cout << "Second hash256 : " << second_hash << endl;
+	return second_hash;
+}
+
+inline string decode_base58(string inp)
 {
-	return sha256(sha256(inp));
+	string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+	cpp_int num = 0;
+	for (int j = 0; j < inp.length(); j++) {
+		num *= 58;
+		num += BASE58_ALPHABET.find(inp[j]);
+	}
+	string combined = dec_to_hex_byte(num, 25);
+	string checksum = combined.substr(combined.size() - 4*BYTE_MULTIPLIER);
+	cout << "Combined : " << combined << endl;
+	cout << "Checksum : " << checksum << endl;
+	cout << "Hash split : " << combined.substr(0, combined.size() - 4 * BYTE_MULTIPLIER) << endl;
+	string hash_result = hash256(combined.substr(0, combined.size() - 4*BYTE_MULTIPLIER));
+	cout << "Hash Result : " << hash_result << endl;
+	string temp_result = hash_result.substr(0, 4*BYTE_MULTIPLIER);
+	
+	cout << "Temp Result : " << temp_result << endl;
+	if ( temp_result != checksum) {
+		cout << "Bad Address Checksum :: " << endl;
+		throw("Bad Address");
+	}
+	return combined.substr(1, combined.size() - 4);
 }
 
 inline string uint8_to_hex_string(const uint8_t* v, const size_t s) {
@@ -160,7 +197,11 @@ inline string uint8_to_hex_string(const uint8_t* v, const size_t s) {
 
 inline string hash160(string inp)
 {
-	inp = sha256(inp);
+	//boost::uint8_t sha256digest[cryptlite::sha256::HASH_SIZE];
+	//cryptlite::sha256::hash(inp, sha256digest);
+	//string hash_res = lexical_cast<string>(lexical_cast<int>(sha256digest));
+
+	inp = sha256::hash_hex(inp);
 	unsigned char* val = new unsigned char[inp.length() + 1];
 	strcpy((char*)val, inp.c_str());
 
@@ -224,7 +265,7 @@ inline bool is_integer(string inp)
 {
 	try
 	{
-		lexical_cast<cpp_int>("0x"+inp);
+		lexical_cast<cpp_int>("0x" + inp);
 		return true;
 	}
 	catch (bad_lexical_cast&)

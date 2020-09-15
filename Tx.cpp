@@ -21,6 +21,15 @@ Tx::Tx(string input_stream, bool testnet)
 	this->locktime = little_endian_to_int(input_stream);
 }
 
+Tx::Tx(cpp_int inp_version, vector<TxIn> inp_tx_ins, vector<TxOut> inp_tx_outs, cpp_int inp_locktime, bool inp_testnet)
+{
+	this->version = inp_version;
+	this->tx_ins = inp_tx_ins;
+	this->tx_outs = inp_tx_outs;
+	this->locktime = inp_locktime;
+	this->testnet = inp_testnet;
+}
+
 string Tx::id()
 {
 	stringstream stream;
@@ -88,6 +97,8 @@ bool Tx::verify()
 
 string Tx::sig_hash(int input_index)
 {
+	int SIGHASH_ALL = 1;
+
 	string s = byte_to_little_endian(dec_to_hex_byte(this->version, 4));
 
 	s += encode_varint(this->tx_ins.size());

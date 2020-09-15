@@ -1,7 +1,7 @@
 #pragma once
+
 #ifndef SIGNATURE_H
 #define SIGNATURE_H
-
 #include "Helper.h"
 
 class Signature

@@ -1,7 +1,7 @@
 #pragma once
+
 #ifndef S256F_H
 #define S256F_H
-
 #include "Helper.h"
 
 class S256Field

@@ -1,7 +1,7 @@
 // Bitcoin.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #define _CRT_SECURE_NO_WARNINGS
-#include "S256Point.h"
+//#include "S256Point.h"
 #include "PrivateKey.h"
 #include "Tx.h"
 S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
@@ -9,6 +9,7 @@ S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bf
 
 string prefix = "<<<<<<<<<<";
 string suffix = ">>>>>>>>>>";
+
 void ecc_test()
 {
 
@@ -24,7 +25,9 @@ void ecc_test()
 
     cout << "Private Key(5003) : " << endl;
     PrivateKey priv_key = PrivateKey(5003);
-    cpp_int z("0x"+sha256("Learning bitcoin"));
+    string hash_res = sha256::hash_hex("Learning bitcoin");
+
+    cpp_int z("0x"+hash_res);
     cout << "z : " << z << endl;
     Signature example_sign = priv_key.sign(z);
     cout << "Signature DER : " << example_sign.der() << endl;
@@ -38,7 +41,9 @@ void serialization_test()
 
     cout << "Private Key(5003) : " << endl;
     PrivateKey priv_key = PrivateKey(5003);
-    cpp_int z("0x" + sha256("Learning bitcoin"));
+    
+    string hash_res = sha256::hash_hex("Learning bitcoin");
+    cpp_int z("0x" + hash_res);
     cout << "z : " << z << endl;
     Signature example_sign = priv_key.sign(z);
     cout << "SEC Compressed : " << priv_key.pub_key.sec(true) << endl;
@@ -89,12 +94,39 @@ void script_test()
     //cout << "RESULT : " << result.evaluate(string("0")) << endl;
 }
 
+void transaction_creation_validation_test()
+{
+    //TRANSACTION CREATION PAGE 140
+    string prev_tx = "0d6fe5213c0b3291f208cba8bfb59b7476dffacc4e5cb66f6eb20a080843a299";
+    cpp_int prev_index = 13;
+    vector<TxIn> tx_ins;
+    TxIn tx_in = TxIn(prev_tx, prev_index);
+    tx_ins.push_back(tx_in);
+
+    vector<TxOut> tx_outs;
+    cpp_int change_amount = lexical_cast<cpp_int>(0.33 * 100000000);
+    string change_h160 = decode_base58("mzx5YhAH9kNHtcN481u6WkjeHjYtVeKVh2");
+
+    Script change_script = Op::p2pkh_script(change_h160);
+    TxOut change_output = TxOut(change_amount, change_script);
+    tx_outs.push_back(change_output);
+
+    cpp_int target_amount = lexical_cast<cpp_int>(0.1 * 100000000);
+    string target_h160 = decode_base58("mnrVtF8DWjMu839VW3rBfgYaAfKk8983Xf");
+    Script target_script = Op::p2pkh_script(target_h160);
+    TxOut target_output = TxOut(target_amount, target_script);
+    tx_outs.push_back(target_output);
+
+    Tx tx_obj = Tx(1, tx_ins, tx_outs, 0, true);
+}
+
 int main()
 {
     /*ecc_test();
-    serialization_test();*/
-    //transaction_test();
-    script_test();
+    serialization_test();
+    transaction_test();
+    script_test();*/
+    transaction_creation_validation_test();
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
 
 }

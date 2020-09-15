@@ -12,6 +12,12 @@ TxOut::TxOut(string &input_stream)
 	this->script_pubkey = Script(input_stream);
 }
 
+TxOut::TxOut(cpp_int inp_amount, Script inp_script)
+{
+	this->amount = inp_amount;
+	this->script_pubkey = inp_script;
+}
+
 string TxOut::serialize()
 {
 	string result = "";

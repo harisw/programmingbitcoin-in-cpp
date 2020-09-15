@@ -1,9 +1,11 @@
 #pragma comment(lib, "urlmon.lib")
 
 #pragma once
+#include "Script.h"
+
 #ifndef TX_IN_H
 #define TX_IN_H
-#include "Script.h"
+
 #include <urlmon.h>
 #include <WinInet.h>
 

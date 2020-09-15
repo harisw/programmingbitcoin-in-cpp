@@ -2,9 +2,10 @@
 #include "TxOut.h"
 
 #pragma once
+
+
 #ifndef TX_H
 #define TX_H
-
 #include "Helper.h"
 
 class TxIn;
@@ -21,6 +22,7 @@ public:
 
 	Tx();
 	Tx(string input_stream, bool testnet = false);
+	Tx(cpp_int inp_version, vector<TxIn> inp_tx_ins, vector<TxOut> inp_tx_outs, cpp_int inp_locktime, bool inp_testnet);
 	string id();
 	cpp_int hash();
 	string serialize();

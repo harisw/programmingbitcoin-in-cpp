@@ -157,4 +157,3 @@ bool Script::evaluate(string z)
 
 	return true;
 }
-
