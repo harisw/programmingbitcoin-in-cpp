@@ -115,8 +115,6 @@ bool Tx::verify()
 
 string Tx::sig_hash(int input_index)
 {
-	int SIGHASH_ALL = 1;
-
 	string s = byte_to_little_endian(dec_to_hex_byte(this->version, 4));
 
 	s += encode_varint(this->tx_ins.size());

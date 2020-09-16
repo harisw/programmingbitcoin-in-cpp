@@ -4,6 +4,9 @@
 
 #define BYTE_MULTIPLIER 2
 #define _CRT_SECURE_NO_WARNINGS
+#define SIGHASH_ALL 1
+#define SIGHASH_NONE 2
+#define SIGHASH_SINGLE 3
 
 #include <iostream>
 #include <fstream>
@@ -20,9 +23,7 @@ using namespace boost;
 using boost::multiprecision::cpp_int;
 
 
-//int SIGHASH_ALL = 1;
-//int SIGHASH_NONE = 2;
-//int SIGHASH_SINGLE = 3;
+
 //string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
 inline cpp_int ipow(cpp_int base, cpp_int exp, cpp_int prime = 0)
@@ -154,7 +155,6 @@ inline string hash256(string inp)
 
 inline string decode_base58(string inp)
 {
-	cout << "inp : " << inp << endl;
 	string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 	cpp_int num = 0;
 	for (int j = 0; j < inp.length(); j++) {
