@@ -25,7 +25,8 @@ void ecc_test()
 
     cout << "Private Key(5003) : " << endl;
     PrivateKey priv_key = PrivateKey(5003);
-    string hash_res = sha256::hash_hex("Learning bitcoin");
+    string hash_res = hash256("Programming Bitcoin");
+    cout << "hash256 : " << hash_res << endl;
 
     cpp_int z("0x"+hash_res);
     cout << "z : " << z << endl;
@@ -34,7 +35,7 @@ void ecc_test()
     cout << "Verification : " << priv_key.pub_key.verify(z, example_sign) << endl;
     cout << endl << endl << endl;
 }
-
+    
 void serialization_test()
 {
     cout << prefix << "  SERIALIZATION  " << suffix << endl << endl;
@@ -43,6 +44,7 @@ void serialization_test()
     PrivateKey priv_key = PrivateKey(5003);
     
     string hash_res = sha256::hash_hex("Learning bitcoin");
+    cout << "sha256 : " << hash_res << endl;
     cpp_int z("0x" + hash_res);
     cout << "z : " << z << endl;
     Signature example_sign = priv_key.sign(z);
@@ -122,10 +124,10 @@ void transaction_creation_validation_test()
 
 int main()
 {
-    /*ecc_test();
-    serialization_test();
-    transaction_test();
-    script_test();*/
+    //ecc_test();
+    //serialization_test();
+    //transaction_test();
+    //script_test();
     transaction_creation_validation_test();
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
 

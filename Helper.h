@@ -149,17 +149,15 @@ inline string encode_base58(string inp)
 
 inline string hash256(string inp)
 {	
-	reverse(inp.begin(), inp.end());
-	string first_hash = sha256::hash_hex(inp);
-	cout << "First hash256 : " << first_hash << endl;
+	//string first_hash = sha256::hash_hex(inp);
 
-	string second_hash = sha256::hash_hex(first_hash);
-	cout << "Second hash256 : " << second_hash << endl;
-	return second_hash;
+	//string second_hash = sha256::hash_hex(first_hash);
+	return sha256::hash_hex(sha256::hash_hex(inp));
 }
 
 inline string decode_base58(string inp)
 {
+	cout << "inp : " << inp << endl;
 	string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 	cpp_int num = 0;
 	for (int j = 0; j < inp.length(); j++) {
@@ -167,10 +165,10 @@ inline string decode_base58(string inp)
 		num += BASE58_ALPHABET.find(inp[j]);
 	}
 	string combined = dec_to_hex_byte(num, 25);
+	
 	string checksum = combined.substr(combined.size() - 4*BYTE_MULTIPLIER);
 	cout << "Combined : " << combined << endl;
 	cout << "Checksum : " << checksum << endl;
-	cout << "Hash split : " << combined.substr(0, combined.size() - 4 * BYTE_MULTIPLIER) << endl;
 	string hash_result = hash256(combined.substr(0, combined.size() - 4*BYTE_MULTIPLIER));
 	cout << "Hash Result : " << hash_result << endl;
 	string temp_result = hash_result.substr(0, 4*BYTE_MULTIPLIER);
