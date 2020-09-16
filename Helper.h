@@ -149,9 +149,6 @@ inline string encode_base58(string inp)
 
 inline string hash256(string inp)
 {	
-	//string first_hash = sha256::hash_hex(inp);
-
-	//string second_hash = sha256::hash_hex(first_hash);
 	return sha256::hash_hex(sha256::hash_hex(inp));
 }
 
@@ -165,20 +162,18 @@ inline string decode_base58(string inp)
 		num += BASE58_ALPHABET.find(inp[j]);
 	}
 	string combined = dec_to_hex_byte(num, 25);
+
+	//string checksum = combined.substr(combined.size() - 4*BYTE_MULTIPLIER);
+	//string hash_result = hash256(combined.substr(0, combined.size() - 4*BYTE_MULTIPLIER));
+	//string temp_result = hash_result.substr(0, 4*BYTE_MULTIPLIER);
 	
-	string checksum = combined.substr(combined.size() - 4*BYTE_MULTIPLIER);
-	cout << "Combined : " << combined << endl;
-	cout << "Checksum : " << checksum << endl;
-	string hash_result = hash256(combined.substr(0, combined.size() - 4*BYTE_MULTIPLIER));
-	cout << "Hash Result : " << hash_result << endl;
-	string temp_result = hash_result.substr(0, 4*BYTE_MULTIPLIER);
+
+	//if ( temp_result != checksum) {
+	//	cout << "Bad Address Checksum :: " << endl;
+	//	throw("Bad Address");
+	//}
+	return combined.substr(1*BYTE_MULTIPLIER, combined.size() - 4*BYTE_MULTIPLIER);
 	
-	cout << "Temp Result : " << temp_result << endl;
-	if ( temp_result != checksum) {
-		cout << "Bad Address Checksum :: " << endl;
-		throw("Bad Address");
-	}
-	return combined.substr(1, combined.size() - 4);
 }
 
 inline string uint8_to_hex_string(const uint8_t* v, const size_t s) {

@@ -30,6 +30,24 @@ Tx::Tx(cpp_int inp_version, vector<TxIn> inp_tx_ins, vector<TxOut> inp_tx_outs, 
 	this->testnet = inp_testnet;
 }
 
+void Tx::print()
+{
+	cout << "Tx ID : " << this->id() << endl;
+	cout << "Tx version : " << this->version << endl;
+	string tx_in_serials = "";
+	vector<TxIn>::iterator it_in;
+	for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++)
+		tx_in_serials += (it_in->serialize() + "\n");
+	cout << "TxIns : " << tx_in_serials << endl;
+
+	string tx_out_serials = "";
+	vector<TxOut>::iterator it_out;
+	for (it_out = this->tx_outs.begin(); it_out != this->tx_outs.end(); it_out++)
+		tx_out_serials += (it_out->serialize() + "\n");
+	cout << "TxOuts : " << tx_out_serials << endl;
+	cout << "LockTime : " << this->locktime << endl;
+}
+
 string Tx::id()
 {
 	stringstream stream;

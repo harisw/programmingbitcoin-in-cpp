@@ -120,6 +120,7 @@ void transaction_creation_validation_test()
     tx_outs.push_back(target_output);
 
     Tx tx_obj = Tx(1, tx_ins, tx_outs, 0, true);
+    tx_obj.print();
 }
 
 int main()
@@ -128,6 +129,9 @@ int main()
     //serialization_test();
     //transaction_test();
     //script_test();
+    //string res = encode_base58("F58B74");
+    //cout << "RES : " << res << endl;
+    //cout << "Input back : " << decode_base58(res) << endl;
     transaction_creation_validation_test();
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
 
