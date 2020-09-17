@@ -143,6 +143,19 @@ string Tx::sig_hash(int input_index)
 	return h256;
 }
 
+bool Tx::sign_input(int input_index, PrivateKey priv_key)
+{
+	cpp_int z = cpp_int("0x" + this->sig_hash(input_index));
+	
+	string der = priv_key.sign(z).der();
+	string sig = der + to_string(SIGHASH_ALL);
+	string sec = priv_key.pub_key.sec();
+
+	//vector<string> cmds = { sig, sec };
+	this->tx_ins[input_index].script_sig = Script({ sig, sec });
+	return this->verify_input(input_index);
+}
+
 bool Tx::verify_input(int input_index)
 {
 	TxIn curr_tx = this->tx_ins[input_index];

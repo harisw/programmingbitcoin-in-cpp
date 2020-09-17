@@ -10,6 +10,7 @@
 
 class TxIn;
 class TxOut;
+class PrivateKey;
 
 class Tx
 {
@@ -31,6 +32,8 @@ public:
 	bool verify();
 	bool verify_input(int input_index);
 	string sig_hash(int input_index);
+	bool sign_input(int input_index, PrivateKey priv_key);
 };
 
+#include "PrivateKey.h"
 #endif // !TX_H

@@ -452,6 +452,7 @@ bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, 
 	//	op_1(stack);
 	//	break;
 	default:
+		throw("OP NOT FOUND");
 		break;
 	}
 	return false;
