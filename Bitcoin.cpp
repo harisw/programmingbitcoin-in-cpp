@@ -72,7 +72,7 @@ void transaction_test()
     Tx trans = Tx(hex_trans);
     cout << "First input (prev_tx) : " << trans.tx_ins.front().prev_tx << endl;
     cout << "Last output (amount) : " << trans.tx_outs.back().amount << endl;
-    cout << "Tx Fee : " << trans.fee() << endl;
+    //cout << "Tx Fee : " << trans.fee() << endl;
 }
 
 void script_test()
@@ -86,14 +86,7 @@ void script_test()
     Script result = script_sig + script_pubkey;
     cout << "RESULT : " << result.evaluate(string("0")) << endl;
 
-    //Exercise 4
-    //first_script = {
-    //    string("76"), string("76"), string("95"), string("93"), string("56"), string("87") };
-    //second_script = { string("52") };
-    //Script script_pubkey = Script(first_script);
-    //Script script_sig = Script(second_script);
-    //Script result = script_sig + script_pubkey;
-    //cout << "RESULT : " << result.evaluate(string("0")) << endl;
+    
 }
 
 void transaction_creation_validation_test()
@@ -148,16 +141,12 @@ void transaction_creation_on_testnet()
 
 int main()
 {
-    //ecc_test();
-    //serialization_test();
+    ecc_test();
+    serialization_test();
     transaction_test();
     //script_test();
-    //string res = encode_base58("F58B74");
-    //cout << "RES : " << res << endl;
-    //cout << "Input back : " << decode_base58(res) << endl;
     //transaction_creation_validation_test();
-    /*transaction_signing_test();
-    transaction_creation_on_testnet();*/
-    //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
+    //transaction_signing_test();
+    //transaction_creation_on_testnet();
 
 }

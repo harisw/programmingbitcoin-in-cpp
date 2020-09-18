@@ -11,12 +11,12 @@ Tx::Tx(string input_stream, bool testnet)
 	input_stream.erase(0, 4 * BYTE_MULTIPLIER);
 
 	cpp_int num_inputs = read_varint(input_stream);
-	cout << "Num inputs : " << num_inputs << endl;
+
 	for (cpp_int j = 0; j < num_inputs; j++) {
 		this->tx_ins.push_back(TxIn(input_stream));
 	}
 	cpp_int num_outputs = read_varint(input_stream);
-	cout << "Num outputs : " << num_outputs << endl;
+
 	for (cpp_int j = 0; j < num_outputs; j++) {
 		this->tx_outs.push_back(TxOut(input_stream));
 	}
@@ -61,10 +61,8 @@ string Tx::id()
 cpp_int Tx::hash()
 {
 	string serialized = this->serialize();
-	cout << "Serialize : " << serialized << endl;
 	string hash_result = hash256(serialized);
 	hash_result = string(hash_result.rbegin(), hash_result.rend());
-	cout << "Tx Hash : " << hash_result << endl;
 	return cpp_int("0x"+hash_result);
 }
 
@@ -75,7 +73,7 @@ string Tx::serialize()
 	result = byte_to_little_endian(dec_to_hex_byte(this->version, 4*BYTE_MULTIPLIER));
 
 	string tx_in_len = encode_varint(this->tx_ins.size());
-	cout << "TX IN Len : " << tx_in_len << endl;
+	
 	result += encode_varint(this->tx_ins.size());
 	vector<TxIn>::iterator it_in;
 	for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++) {
@@ -83,7 +81,7 @@ string Tx::serialize()
 	}
 
 	string tx_out_len = encode_varint(this->tx_outs.size());
-	cout << "TX OUT Len : " << tx_out_len << endl;
+	
 
 	result += encode_varint(this->tx_outs.size());
 	vector<TxOut>::iterator it_out;
@@ -92,6 +90,7 @@ string Tx::serialize()
 	}
 	
 	result += byte_to_little_endian(dec_to_hex_byte(this->locktime, 4*BYTE_MULTIPLIER));
+
 	return result;
 }
 

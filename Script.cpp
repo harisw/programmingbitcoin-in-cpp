@@ -66,7 +66,6 @@ string Script::raw_serialize()
 {
 	string result = "";
 	string cmd;
-	ofstream out("raw_serial.txt");
 
 	for (int j = 0; j < this->cmds.size(); j++) {
 		cmd = this->cmds[j];
@@ -75,7 +74,6 @@ string Script::raw_serialize()
 		}
 		else {
 			cpp_int length = cmd.length()/2;
-
 			if (length < 75)					//AMBIGUOUS < 75 INCLUSIVE
 				result += byte_to_little_endian(dec_to_hex_byte(length, 1));
 			else if(length > 75 && length < 0x100) {
@@ -91,10 +89,8 @@ string Script::raw_serialize()
 			result += cmd;
 
 		}
-		out << result <<endl << endl;
 		
 	}
-	out.close();
 	return result;
 }
 

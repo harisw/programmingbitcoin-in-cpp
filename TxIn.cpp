@@ -43,7 +43,7 @@ string TxIn::serialize()
 	result += this->script_sig.serialize();
 
 	result += dec_to_hex_byte(this->sequence, 4*BYTE_MULTIPLIER);
-	cout << "current res : " << result << endl;
+
 	return result;
 }
 
@@ -74,14 +74,12 @@ Tx TxIn::fetch_tx(bool testnet)
 	stream->Release();
 	string raw = ss.str();
 	Tx result_tx;
-	ofstream out("output.txt");
 	cout << "FETCHER " << endl;
 	try
 	{
 		algorithm::trim(raw);
 		string result;
-		out << raw;
-		out.close();
+
 		if (raw.substr(4*BYTE_MULTIPLIER, 2) == "00") {
 			result = raw.substr(0, 4) + raw.substr(6);
 			result_tx = Tx(result, testnet);
@@ -92,9 +90,7 @@ Tx TxIn::fetch_tx(bool testnet)
 		else {
 			result_tx = Tx(raw, testnet);
 		}
-		//result_tx.print();
-		cout << "RESULT_TX : " << result_tx.id() << endl;
-		cout << "TX_ID : " << tx_id << endl;
+
 		if (result_tx.id() != tx_id)
 			throw("Tx ID is not the same!");
 	}

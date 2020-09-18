@@ -258,9 +258,19 @@ inline cpp_int read_varint(string &inp_stream)
 
 inline bool is_integer(string inp)
 {
+	//try {
+	//	int res = strtou("0x"+inp);
+	//	
+	//	return true;
+	//}
+	//catch (std::exception const& e)
+	//{
+	//	return false;
+	//}
 	try
 	{
-		lexical_cast<cpp_int>("0x" + inp);
+		//cpp_int result = cpp_int(inp);
+		lexical_cast<cpp_int>(inp);
 		return true;
 	}
 	catch (bad_lexical_cast&)
