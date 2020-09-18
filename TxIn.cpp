@@ -41,10 +41,9 @@ string TxIn::serialize()
 	result += reverse_byte(dec_to_hex_byte(this->prev_index, 4*BYTE_MULTIPLIER));
 
 	result += this->script_sig.serialize();
-	//cout << "current res : " << result << endl;
 
 	result += dec_to_hex_byte(this->sequence, 4*BYTE_MULTIPLIER);
-
+	cout << "current res : " << result << endl;
 	return result;
 }
 

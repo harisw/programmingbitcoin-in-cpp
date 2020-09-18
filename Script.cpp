@@ -75,8 +75,9 @@ string Script::raw_serialize()
 		}
 		else {
 			cpp_int length = cmd.length()/2;
+
 			if (length < 75)					//AMBIGUOUS < 75 INCLUSIVE
-				result += byte_to_little_endian(dec_to_hex_byte(length, 1 * BYTE_MULTIPLIER));
+				result += byte_to_little_endian(dec_to_hex_byte(length, 1));
 			else if(length > 75 && length < 0x100) {
 				result += byte_to_little_endian(dec_to_hex_byte(76, 1));
 				result += byte_to_little_endian(dec_to_hex_byte(length, 1 * BYTE_MULTIPLIER));
@@ -88,8 +89,8 @@ string Script::raw_serialize()
 				throw("Cmd is too Long!!");
 			}
 			result += cmd;
+
 		}
-		cout << "check cmd : " << result << endl;
 		out << result <<endl << endl;
 		
 	}
@@ -101,9 +102,7 @@ string Script::serialize()
 {
 	string result = this->raw_serialize();
 	cpp_int total = result.length()/BYTE_MULTIPLIER;
-	//cout << "TOTAL : " << total << endl;
-	cout << "Total " << encode_varint(total) << endl;
-	cout << "Result Script serial " << result << endl;
+
 	return string(encode_varint(total) + result);
 }
 

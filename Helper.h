@@ -81,7 +81,8 @@ inline string reverse_byte(string inp)
 inline string byte_to_little_endian(string inp)
 {
 	string result = "";
-
+	if (inp.size() <= 2)
+		return inp;
 	for (int j = inp.size() - 1; j > 0; j -= 2) {
 		result += inp[j - 1];
 		result += inp[j];
