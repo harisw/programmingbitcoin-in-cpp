@@ -6,7 +6,7 @@ TxOut::TxOut()
 
 TxOut::TxOut(string &input_stream)
 {
-	this->amount = little_endian_to_int(input_stream.substr(0, 16));
+	this->amount = little_endian_to_int(input_stream.substr(0, 8*BYTE_MULTIPLIER));
 	input_stream.erase(0, 16);
 
 	this->script_pubkey = Script(input_stream);
@@ -21,7 +21,7 @@ TxOut::TxOut(cpp_int inp_amount, Script inp_script)
 string TxOut::serialize()
 {
 	string result = "";
-	result = byte_to_little_endian(dec_to_hex_byte(this->amount, 16));
+	result = byte_to_little_endian(dec_to_hex_byte(this->amount, 8*BYTE_MULTIPLIER));
 
 	result += this->script_pubkey.serialize();
 

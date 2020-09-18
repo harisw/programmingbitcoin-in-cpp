@@ -72,7 +72,7 @@ void transaction_test()
     Tx trans = Tx(hex_trans);
     cout << "First input (prev_tx) : " << trans.tx_ins.front().prev_tx << endl;
     cout << "Last output (amount) : " << trans.tx_outs.back().amount << endl;
-    //cout << "Tx Fee : " << trans.fee() << endl;
+    cout << "Tx Fee : " << trans.fee() << endl;
 }
 
 void script_test()
@@ -134,22 +134,30 @@ void transaction_signing_test()
     string sig = der + to_string(SIGHASH_ALL);
     string sec = priv_key.pub_key.sec();
     
-    //vector<string> cmds = { sig, sec };
     Script script_sig = Script({ sig, sec });
     transaction.tx_ins[0].script_sig = script_sig;
     cout << "RESULT : " << transaction.serialize() << endl;
 }
+
+void transaction_creation_on_testnet()
+{
+    cpp_int secret = cpp_int("0x" +reverse_byte(hash256("This is my secret")));
+    PrivateKey priv_key = PrivateKey(secret);
+    cout << "Address : " << priv_key.pub_key.address(true);
+}
+
 int main()
 {
     //ecc_test();
     //serialization_test();
-    //transaction_test();
+    transaction_test();
     //script_test();
     //string res = encode_base58("F58B74");
     //cout << "RES : " << res << endl;
     //cout << "Input back : " << decode_base58(res) << endl;
-    transaction_creation_validation_test();
-    transaction_signing_test();
+    //transaction_creation_validation_test();
+    /*transaction_signing_test();
+    transaction_creation_on_testnet();*/
     //cpp_int x("0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
 
 }

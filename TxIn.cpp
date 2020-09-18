@@ -35,15 +35,17 @@ string TxIn::serialize()
 {
 	string  result;
 
-	result = string(this->prev_tx.rbegin(), this->prev_tx.rend());
-
-	result += byte_to_little_endian(dec_to_hex_byte(this->prev_index, 8));
+	result = reverse_byte(this->prev_tx);
+	
+	
+	result += reverse_byte(dec_to_hex_byte(this->prev_index, 4*BYTE_MULTIPLIER));
 
 	result += this->script_sig.serialize();
+	//cout << "current res : " << result << endl;
 
-	result += byte_to_little_endian(dec_to_hex_byte(this->sequence, 8));
+	result += dec_to_hex_byte(this->sequence, 4*BYTE_MULTIPLIER);
 
-	return string();
+	return result;
 }
 
 Tx TxIn::fetch_tx(bool testnet)
@@ -74,13 +76,14 @@ Tx TxIn::fetch_tx(bool testnet)
 	string raw = ss.str();
 	Tx result_tx;
 	ofstream out("output.txt");
+	cout << "FETCHER " << endl;
 	try
 	{
 		algorithm::trim(raw);
 		string result;
 		out << raw;
 		out.close();
-		if (raw[4] == 0) {
+		if (raw.substr(4*BYTE_MULTIPLIER, 2) == "00") {
 			result = raw.substr(0, 4) + raw.substr(6);
 			result_tx = Tx(result, testnet);
 
@@ -90,6 +93,7 @@ Tx TxIn::fetch_tx(bool testnet)
 		else {
 			result_tx = Tx(raw, testnet);
 		}
+		//result_tx.print();
 		cout << "RESULT_TX : " << result_tx.id() << endl;
 		cout << "TX_ID : " << tx_id << endl;
 		if (result_tx.id() != tx_id)

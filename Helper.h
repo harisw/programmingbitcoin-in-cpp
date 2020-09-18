@@ -217,13 +217,13 @@ inline string base58_checksum(string inp)
 inline string encode_varint(cpp_int inp)
 {
 	if (inp < 0xfd)
-		return dec_to_hex_byte(inp);
+		return dec_to_hex_byte(inp, 1 * BYTE_MULTIPLIER);
 	else if (inp < 0x10000)
-		return "fd" + byte_to_little_endian(dec_to_hex_byte(inp, 2));
+		return "fd" + byte_to_little_endian(dec_to_hex_byte(inp, 2*BYTE_MULTIPLIER));
 	else if (inp < 0x100000000)
-		return "fe" + byte_to_little_endian(dec_to_hex_byte(inp, 4));
+		return "fe" + byte_to_little_endian(dec_to_hex_byte(inp, 4 * BYTE_MULTIPLIER));
 	else if (inp < cpp_int("0x10000000000000000"))
-		return "ff" + byte_to_little_endian(dec_to_hex_byte(inp, 8));
+		return "ff" + byte_to_little_endian(dec_to_hex_byte(inp, 8 * BYTE_MULTIPLIER));
 	
 	throw("Integer too large");
 }
@@ -234,6 +234,7 @@ inline cpp_int read_varint(string &inp_stream)
 	string first_byte = inp_stream.substr(0, 2);
 	inp_stream.erase(0, 2);
 	string result = "0x";
+	
 	if (first_byte == "fd") {
 		result += inp_stream.substr(0, 4);
 		inp_stream.erase(0, 4);

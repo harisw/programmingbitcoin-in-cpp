@@ -71,24 +71,25 @@ string Script::raw_serialize()
 	for (int j = 0; j < this->cmds.size(); j++) {
 		cmd = this->cmds[j];
 		if (is_integer(cmd)) {
-			result += byte_to_little_endian(dec_to_hex_byte(cpp_int("0x"+cmd), 1));
+			result += byte_to_little_endian(dec_to_hex_byte(cpp_int("0x"+cmd), 1*BYTE_MULTIPLIER));
 		}
 		else {
-			cpp_int length = cmd.length();
+			cpp_int length = cmd.length()/2;
 			if (length < 75)					//AMBIGUOUS < 75 INCLUSIVE
-				result += byte_to_little_endian(dec_to_hex_byte(length, 1));
+				result += byte_to_little_endian(dec_to_hex_byte(length, 1 * BYTE_MULTIPLIER));
 			else if(length > 75 && length < 0x100) {
 				result += byte_to_little_endian(dec_to_hex_byte(76, 1));
-				result += byte_to_little_endian(dec_to_hex_byte(length, 1));
+				result += byte_to_little_endian(dec_to_hex_byte(length, 1 * BYTE_MULTIPLIER));
 			} else if (length > 0x100 && length <= 520) {
 				result += byte_to_little_endian(dec_to_hex_byte(77, 1));
-				result += byte_to_little_endian(dec_to_hex_byte(length, 2));
+				result += byte_to_little_endian(dec_to_hex_byte(length, 2 * BYTE_MULTIPLIER));
 			}
 			else {
 				throw("Cmd is too Long!!");
 			}
 			result += cmd;
 		}
+		cout << "check cmd : " << result << endl;
 		out << result <<endl << endl;
 		
 	}
@@ -99,8 +100,10 @@ string Script::raw_serialize()
 string Script::serialize()
 {
 	string result = this->raw_serialize();
-	cpp_int total = result.length()/2;
-	cout << "TOTAL : " << total << endl;
+	cpp_int total = result.length()/BYTE_MULTIPLIER;
+	//cout << "TOTAL : " << total << endl;
+	cout << "Total " << encode_varint(total) << endl;
+	cout << "Result Script serial " << result << endl;
 	return string(encode_varint(total) + result);
 }
 
