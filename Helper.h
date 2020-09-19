@@ -7,6 +7,7 @@
 #define SIGHASH_ALL 1
 #define SIGHASH_NONE 2
 #define SIGHASH_SINGLE 3
+#define HEXADECIMAL 16
 
 #include <iostream>
 #include <fstream>
@@ -258,25 +259,30 @@ inline cpp_int read_varint(string &inp_stream)
 
 inline bool is_integer(string inp)
 {
-	//try {
-	//	int res = strtou("0x"+inp);
-	//	
-	//	return true;
-	//}
-	//catch (std::exception const& e)
-	//{
-	//	return false;
-	//}
-	try
-	{
-		//cpp_int result = cpp_int(inp);
-		lexical_cast<cpp_int>(inp);
-		return true;
+	try {
+		if (inp == "0")
+			return true;
+
+		int res = stoul("0x"+inp, nullptr, HEXADECIMAL);
+		if(res >= 0 && res <= 185)
+			return true;
+
+		return false;
 	}
-	catch (bad_lexical_cast&)
+	catch (std::exception const& e)
 	{
 		return false;
-		// if it throws, it's not a number.
 	}
+	//try
+	//{
+	//	//cpp_int result = cpp_int(inp);
+	//	lexical_cast<cpp_int>("0x"+inp);
+	//	return true;
+	//}
+	//catch (bad_lexical_cast&)
+	//{
+	//	return false;
+	//	// if it throws, it's not a number.
+	//}
 }
 #endif // !HELPER_H

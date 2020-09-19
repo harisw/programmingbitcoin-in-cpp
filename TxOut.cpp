@@ -23,6 +23,7 @@ string TxOut::serialize()
 	string result = "";
 	result = byte_to_little_endian(dec_to_hex_byte(this->amount, 8*BYTE_MULTIPLIER));
 	result += this->script_pubkey.serialize();
+
 	return result;
 }
 

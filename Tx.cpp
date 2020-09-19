@@ -16,7 +16,7 @@ Tx::Tx(string input_stream, bool testnet)
 		this->tx_ins.push_back(TxIn(input_stream));
 	}
 	cpp_int num_outputs = read_varint(input_stream);
-
+	
 	for (cpp_int j = 0; j < num_outputs; j++) {
 		this->tx_outs.push_back(TxOut(input_stream));
 	}
