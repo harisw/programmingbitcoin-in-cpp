@@ -57,7 +57,7 @@ S256Field S256Field::operator+(const S256Field& operand)
 S256Field S256Field::operator-(const S256Field& operand)
 {
 	if (this->prime != operand.prime)
-		throw("Cannot add two numbers in different field");
+		throw("Cannot substract two numbers in different field");
 	cpp_int result = (this->num - operand.num) % this->prime;
 	if (result < 0)
 		result = (result + this->prime) % this->prime;
@@ -67,7 +67,7 @@ S256Field S256Field::operator-(const S256Field& operand)
 S256Field S256Field::operator*(const S256Field& operand)
 {
 	if (this->prime != operand.prime)
-		throw("Cannot add two numbers in different field");
+		throw("Cannot multiply two numbers in different field");
 	cpp_int result = (this->num * operand.num) % this->prime;
 	return S256Field(result, this->prime);
 }
@@ -93,7 +93,7 @@ S256Field S256Field::operator/(const S256Field& operand)
 {
 
 	if (this->prime != operand.prime)
-		throw("Cannot add two numbers in different field");
+		throw("Cannot divide two numbers in different field");
 
 	cpp_int denominator = ipow(operand.num, (this->prime - 2), this->prime);
 
