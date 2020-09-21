@@ -44,8 +44,7 @@ S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
 		return;
 
 	if ((this->y.pow(2)) != ((this->x.pow(3)) + (this->a * x) + this->b))
-		cout << "haha" << endl;
-		//throw("S256Point (%d, %d) is not on the curve!", x, y);
+		throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
 bool S256Point::operator==(const S256Point& other)
@@ -56,8 +55,20 @@ bool S256Point::operator==(const S256Point& other)
 
 bool S256Point::operator!=(const S256Point& other)
 {
-	return !(this->x == other.x && this->y == other.y
-		&& this->a == other.a && this->b == other.b);
+	return !(*this == other);
+}
+
+S256Point S256Point::operator*(cpp_int scalar)
+{
+	S256Point result = S256Point((cpp_int)0, (cpp_int)0, this->a, this->b);
+	S256Point current = *this;
+	while (scalar) {
+		if (scalar & 1)
+			result = result + current;
+		current = current + current;
+		scalar >>= 1;
+	}
+	return result;
 }
 
 S256Point S256Point::operator+(S256Point& other)
@@ -108,24 +119,7 @@ S256Point S256Point::operator+(S256Point& other)
 	}
 }
 
-S256Point S256Point::operator*(cpp_int scalar)
-{
-	//S256Point result = S256Point((cpp_int)0, (cpp_int)0, this->a, this->b);
-	//for (int j = 1; j <= scalar; j++) {
-	//	result = result + *this;
-	//}
-	//return result;
 
-	S256Point result = S256Point((cpp_int)0, (cpp_int)0, this->a, this->b);
-	S256Point current = *this;
-	while (scalar) {
-		if (scalar & 1)
-			result = result + current;
-		current = current + current;
-		scalar >>= 1;
-	}
-	return result;
-}
 
 S256Field S256Point::getX()
 {
