@@ -176,6 +176,8 @@ string S256Point::sec(bool compressed)
 
 S256Point S256Point::parse(string sec_bin)
 {
+	cpp_int P("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F");
+
 	if (sec_bin.substr(0, 2) == "04") {
 		cpp_int parsed_x(sec_bin.substr(2, 32));
 		cpp_int parsed_y(sec_bin.substr(32, 32));
@@ -186,10 +188,24 @@ S256Point S256Point::parse(string sec_bin)
 		cpp_int parsed_x(sec_bin.substr(2));
 
 		S256Field finite_x = S256Field(parsed_x);
-		S256Field finite_y = finite_x.pow(3) + S256Field(S256_B);
-		finite_y = finite_y.sqrt();
+		S256Field alpha = finite_x.pow(3) + S256Field(S256_B);
+		S256Field beta = alpha.sqrt();
 		
-		return S256Point(finite_x, finite_y);
+		S256Field even_beta;
+		S256Field odd_beta;
+		if (beta.getNum() % 2 == 0) {
+			even_beta = beta;
+			odd_beta = S256Field(P - beta.getNum());
+		}
+		else {
+			even_beta = S256Field(P - beta.getNum());
+			odd_beta = beta;
+		}
+		
+		if(is_even)
+			return S256Point(finite_x, even_beta);
+		else
+			return S256Point(finite_x, odd_beta);
 	}
 }
 
