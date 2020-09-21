@@ -48,32 +48,32 @@ S256Point::S256Point(S256Field x, S256Field y, S256Field a, S256Field b)
 		//throw("S256Point (%d, %d) is not on the curve!", x, y);
 }
 
-bool S256Point::operator==(const S256Point& operand)
+bool S256Point::operator==(const S256Point& other)
 {
-	return this->x == operand.x && this->y == operand.y
-		&& this->a == operand.a && this->b == operand.b;
+	return this->x == other.x && this->y == other.y
+		&& this->a == other.a && this->b == other.b;
 }
 
-bool S256Point::operator!=(const S256Point& operand)
+bool S256Point::operator!=(const S256Point& other)
 {
-	return !(this->x == operand.x && this->y == operand.y
-		&& this->a == operand.a && this->b == operand.b);
+	return !(this->x == other.x && this->y == other.y
+		&& this->a == other.a && this->b == other.b);
 }
 
-S256Point S256Point::operator+(S256Point& operand)
+S256Point S256Point::operator+(S256Point& other)
 {
- 	if (this->a != operand.a || this->b != operand.b)
+ 	if (this->a != other.a || this->b != other.b)
 		throw("S256Point is not on the same curve!");
 
 	//case 0 if one of the point at infinity
 	if (this->x == NULL)
-		return operand;
-	if (&operand.x == NULL)
+		return other;
+	if (&other.x == NULL)
 		return *this;
 
 	//Case 1: self.x == other.x, self.y != other.y
 	//Result is point at infinity
-	if (this->x == operand.x && this->y != operand.y)
+	if (this->x == other.x && this->y != other.y)
 		return S256Point((cpp_int)0, (cpp_int)0, this->a, this->b);
 
 	/*Case 2: self.x ≠ other.x
@@ -81,9 +81,9 @@ S256Point S256Point::operator+(S256Point& operand)
 	s = (y2 - y1) / (x2 - x1)
 	x3 = s * *2 - x1 - x2
 	y3 = s * (x1 - x3) - y1*/
-	if (this->x != operand.x) {
-		S256Field slope = (operand.y - this->y) / (operand.x - this->x);
-		S256Field x3 = ((slope.pow(2)) - this->x) - operand.x;
+	if (this->x != other.x) {
+		S256Field slope = (other.y - this->y) / (other.x - this->x);
+		S256Field x3 = ((slope.pow(2)) - this->x) - other.x;
 		S256Field y3 = (slope * (this->x - x3)) - this->y;
 		return S256Point(x3, y3, this->a, this->b);
 	}
@@ -92,7 +92,7 @@ S256Point S256Point::operator+(S256Point& operand)
 	we return the point at infinity
 	note instead of figuring out what 0 is for each type
 	we just use 0 * self.x*/
-	if (*this == operand && this->y == 0)
+	if (*this == other && this->y == 0)
 		return S256Point((cpp_int)0, (cpp_int)0, this->a, this->b);
 
 	/*Case 3: self == other
@@ -100,7 +100,7 @@ S256Point S256Point::operator+(S256Point& operand)
 	s = (3 * x1 * *2 + a) / (2 * y1)
 	x3 = s * *2 - 2 * x1
 	y3 = s * (x1 - x3) - y1*/
-	if (*this == operand) {
+	if (*this == other) {
 		S256Field slope = ((3*(this->x.pow(2)))+this->a) / (2 * this->y);
 		S256Field x3 = (slope.pow(2)) - 2 * this->x;
 		S256Field y3 = (slope*(this->x - x3)) - this->y;

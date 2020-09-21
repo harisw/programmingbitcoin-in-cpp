@@ -26,59 +26,59 @@ S256Field::S256Field(cpp_int num, cpp_int prime)
 	this->prime = prime;
 }
 
-bool S256Field::operator==(cpp_int operand)
+bool S256Field::operator==(cpp_int other)
 {
-	return this->num == operand;
+	return this->num == other;
 }
 
-bool S256Field::operator!=(cpp_int operand)
+bool S256Field::operator!=(cpp_int other)
 {
-	return this->num != operand;
+	return this->num != other;
 }
 
-bool S256Field::operator==(const S256Field& operand)
+bool S256Field::operator==(const S256Field& other)
 {
-	return this->prime == operand.prime && this->num == operand.num;
+	return this->prime == other.prime && this->num == other.num;
 }
 
-bool S256Field::operator!=(const S256Field& operand)
+bool S256Field::operator!=(const S256Field& other)
 {
-	return !(this->prime == operand.prime && this->num == operand.num);
+	return !(this->prime == other.prime && this->num == other.num);
 }
 
-S256Field S256Field::operator+(const S256Field& operand)
+S256Field S256Field::operator+(const S256Field& other)
 {
-	if ( this->prime != operand.prime)
+	if ( this->prime != other.prime)
 		throw("Cannot add two numbers in different field");
-	cpp_int result = (this->num + operand.num) % this->prime;
+	cpp_int result = (this->num + other.num) % this->prime;
 	return S256Field(result, this->prime);
 }
 
-S256Field S256Field::operator-(const S256Field& operand)
+S256Field S256Field::operator-(const S256Field& other)
 {
-	if (this->prime != operand.prime)
+	if (this->prime != other.prime)
 		throw("Cannot substract two numbers in different field");
-	cpp_int result = (this->num - operand.num) % this->prime;
+	cpp_int result = (this->num - other.num) % this->prime;
 	if (result < 0)
 		result = (result + this->prime) % this->prime;
 	return S256Field(result, this->prime);
 }
 
-S256Field S256Field::operator*(const S256Field& operand)
+S256Field S256Field::operator*(const S256Field& other)
 {
-	if (this->prime != operand.prime)
+	if (this->prime != other.prime)
 		throw("Cannot multiply two numbers in different field");
-	cpp_int result = (this->num * operand.num) % this->prime;
+	cpp_int result = (this->num * other.num) % this->prime;
 	return S256Field(result, this->prime);
 }
 
-S256Field S256Field::operator*(cpp_int operand)
+S256Field S256Field::operator*(cpp_int other)
 {
-	if (operand >= this->prime || operand < 0) {
+	if (other >= this->prime || other < 0) {
 		throw("Number is not in field range 0 to %d", this->prime);
 	}
 
-	cpp_int result = (this->num * operand) % this->prime;
+	cpp_int result = (this->num * other) % this->prime;
 	return S256Field(result, this->prime);
 }
 
@@ -89,13 +89,13 @@ S256Field S256Field::pow(cpp_int exponent)
 	return S256Field(result, this->prime);
 }
 
-S256Field S256Field::operator/(const S256Field& operand)
+S256Field S256Field::operator/(const S256Field& other)
 {
 
-	if (this->prime != operand.prime)
+	if (this->prime != other.prime)
 		throw("Cannot divide two numbers in different field");
 
-	cpp_int denominator = ipow(operand.num, (this->prime - 2), this->prime);
+	cpp_int denominator = ipow(other.num, (this->prime - 2), this->prime);
 
  	cpp_int result = (this->num * denominator) % this->prime;
 	
