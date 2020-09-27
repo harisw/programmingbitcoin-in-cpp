@@ -192,10 +192,6 @@ inline string uint8_to_hex_string(const uint8_t* v, const size_t s) {
 
 inline string hash160(string inp)
 {
-	//boost::uint8_t sha256digest[cryptlite::sha256::HASH_SIZE];
-	//cryptlite::sha256::hash(inp, sha256digest);
-	//string hash_res = lexical_cast<string>(lexical_cast<int>(sha256digest));
-
 	inp = sha256::hash_hex(inp);
 	unsigned char* val = new unsigned char[inp.length() + 1];
 	strcpy((char*)val, inp.c_str());

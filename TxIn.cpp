@@ -12,10 +12,6 @@ TxIn::TxIn(string inp_prev_tx, cpp_int inp_prev_index, Script inp_script_sig, cp
 
 }
 
-void TxIn::print()
-{
-	cout << this->prev_tx << "  :  " << this->prev_index << endl;
-}
 
 TxIn::TxIn(string &inp_stream)
 {
@@ -30,21 +26,25 @@ TxIn::TxIn(string &inp_stream)
 	inp_stream.erase(0, 8);
 }
 
-
 string TxIn::serialize()
 {
 	string  result;
 
 	result = reverse_byte(this->prev_tx);
-	
-	
-	result += reverse_byte(dec_to_hex_byte(this->prev_index, 4*BYTE_MULTIPLIER));
+
+
+	result += reverse_byte(dec_to_hex_byte(this->prev_index, 4 * BYTE_MULTIPLIER));
 
 	result += this->script_sig.serialize();
 
-	result += dec_to_hex_byte(this->sequence, 4*BYTE_MULTIPLIER);
+	result += dec_to_hex_byte(this->sequence, 4 * BYTE_MULTIPLIER);
 
 	return result;
+}
+
+void TxIn::print()
+{
+	cout << this->prev_tx << "  :  " << this->prev_index << endl;
 }
 
 Tx TxIn::fetch_tx(bool testnet)

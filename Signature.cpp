@@ -21,7 +21,7 @@ string Signature::der()
 	string result = "";
 	cpp_int first_byte;
 	string rbin = dec_to_hex_byte(this->r, 32);
-	rbin.erase(0, min(rbin.find_first_not_of('0'), rbin.size() - 1));		//REMOVE LEADING ZEROS
+	rbin.erase(0, min(rbin.find_first_not_of('0'), rbin.size() - 1));
 	first_byte = cpp_int("0x"+rbin.substr(0, 2));
 	if (first_byte & 0x80)
 		rbin = "00" + rbin;
@@ -29,7 +29,7 @@ string Signature::der()
 	result = rbin;
 
 	string sbin = dec_to_hex_byte(this->s, 32);
-	sbin.erase(0, min(sbin.find_first_not_of('0'), sbin.size() - 1));		//REMOVE LEADING ZEROS
+	sbin.erase(0, min(sbin.find_first_not_of('0'), sbin.size() - 1));
 	first_byte = cpp_int("0x" + sbin.substr(0, 2));
 	if (first_byte & 0x80)
 		sbin = "00" + sbin;

@@ -61,8 +61,11 @@ string Tx::id()
 cpp_int Tx::hash()
 {
 	string serialized = this->serialize();
+	cout << "serialized : " << serialized << endl;
 	string hash_result = hash256(serialized);
+	cout << "hash result : " << hash_result << endl;
 	hash_result = string(hash_result.rbegin(), hash_result.rend());
+	cout << "hash reversed : " << hash_result << endl;
 	return cpp_int("0x"+hash_result);
 }
 

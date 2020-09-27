@@ -183,30 +183,29 @@ S256Point S256Point::parse(string sec_bin)
 		cpp_int parsed_y(sec_bin.substr(32, 32));
 		return S256Point(parsed_x, parsed_y);
 	}
-	else {
-		bool is_even = sec_bin.substr(0, 2) == "02";
-		cpp_int parsed_x(sec_bin.substr(2));
 
-		S256Field finite_x = S256Field(parsed_x);
-		S256Field alpha = finite_x.pow(3) + S256Field(S256_B);
-		S256Field beta = alpha.sqrt();
+	bool is_even = sec_bin.substr(0, 2) == "02";
+	cpp_int parsed_x(sec_bin.substr(2));
+
+	S256Field finite_x = S256Field(parsed_x);
+	S256Field alpha = finite_x.pow(3) + S256Field(S256_B);
+	S256Field beta = alpha.sqrt();
 		
-		S256Field even_beta;
-		S256Field odd_beta;
-		if (beta.getNum() % 2 == 0) {
-			even_beta = beta;
-			odd_beta = S256Field(P - beta.getNum());
-		}
-		else {
-			even_beta = S256Field(P - beta.getNum());
-			odd_beta = beta;
-		}
-		
-		if(is_even)
-			return S256Point(finite_x, even_beta);
-		else
-			return S256Point(finite_x, odd_beta);
+	S256Field even_beta;
+	S256Field odd_beta;
+	if (beta.getNum() % 2 == 0) {
+		even_beta = beta;
+		odd_beta = S256Field(P - beta.getNum());
 	}
+	else {
+		even_beta = S256Field(P - beta.getNum());
+		odd_beta = beta;
+	}
+		
+	if(is_even)
+		return S256Point(finite_x, even_beta);
+	else
+		return S256Point(finite_x, odd_beta);
 }
 
 string S256Point::address(bool compressed, bool testnet)

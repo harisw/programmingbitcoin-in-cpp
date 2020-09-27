@@ -16,10 +16,6 @@ class TxIn
 private:
 	static wstring testnet_url;
 	static wstring mainnet_url;
-//	string prev_tx;
-//	cpp_int prev_index;
-//	Script script_sig;
-//	cpp_int sequence;
 public:
 	string prev_tx;
 	cpp_int prev_index;
