@@ -8,9 +8,7 @@
 
 class TxOut
 {
-//private:
-//	cpp_int amount;
-//	Script script_pubkey;
+
 public:
 	cpp_int amount;
 	Script script_pubkey;

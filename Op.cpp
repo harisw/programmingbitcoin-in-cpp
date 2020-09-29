@@ -338,11 +338,104 @@ bool op_2over(vector<string>& stack)
 	return true;
 }
 
-bool op_hash256(vector<string> stack)
+bool op_rot(vector<string> stack)
+{
+	if (stack.size() < 3)
+		return false;
+	string elem = stack.end()[-3]; stack.erase(stack.end() - 3);
+	stack.push_back(elem);
+	return true;
+}
+
+bool op_2rot(vector<string> stack)
+{
+	if (stack.size() < 4)
+		return false;
+	string elem = stack.end()[-6]; stack.erase(stack.end() - 6);
+	string sec_elem = stack.end()[-5];  stack.erase(stack.end() - 5);
+	stack.push_back(elem);
+	stack.push_back(sec_elem);
+	return true;
+}
+
+bool op_swap(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	string elem = stack.end()[-2]; stack.erase(stack.end() - 2);
+	stack.push_back(elem);
+	return true;
+}
+
+bool op_2swap(vector<string> stack)
+{
+	if (stack.size() < 4)
+		return false;
+	vector<string> first = { stack.end()[-2], stack.back() };
+	vector<string> sec = { stack.end()[-4], stack.end()[-3] };
+	stack.resize(stack.size() - 4);
+	stack.insert(stack.end(), first.begin(), first.end());
+	stack.insert(stack.end(), sec.begin(), sec.end());
+	return true;
+}
+
+bool op_ifdup(vector<string> stack)
 {
 	if (stack.size() < 1)
 		return false;
-	stack.back() = hash256(stack.back());
+	if (decode_num(stack.back()) != 0)
+		stack.push_back(stack.back());
+	
+	return true;
+}
+
+bool op_depth(vector<string> stack)
+{
+	stack.push_back(encode_num(stack.size()));
+	return true;
+}
+
+bool op_drop(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	stack.pop_back();
+	return true;
+}
+
+bool op_nip(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	string last_elem = stack.back();
+	stack.pop_back();
+	stack.pop_back();
+	stack.push_back(last_elem);
+	return true;
+}
+
+bool op_over(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	string elem = stack.end()[-2];
+	stack.push_back(elem);
+	return true;
+}
+
+bool op_ripemd160(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	string elem = stack.back(); stack.pop_back();
+	unsigned char* hash = new unsigned char[sizeof(elem) + 25];
+
+	unsigned char* val = new unsigned char[elem.length() + 1];
+	strcpy((char*)val, elem.c_str());
+
+	ripemd160(val, sizeof(val), hash);
+	string result = uint8_to_hex_string(hash, sizeof(hash));
+	stack.push_back(result);
 	return true;
 }
 
@@ -406,24 +499,24 @@ bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, 
 	case 97:
 		op_nop(stack);
 		break;
-	/*case 99:
-		op_if(stack);
+	case 99:
+		op_if(stack, cmds);
 		break;
 	case 100:
-		op_notif(stack);
-		break;*/
+		op_notif(stack, cmds);
+		break;
 	case 105:
 		op_verify(stack);
 		break;
 	case 106:
 		op_return(stack);
 		break;
-	//case 107:
-	//	op_toaltstack(stack);
-	//	break;
-	//case 108:
-	//	op_fromaltstack(stack);
-	//	break;
+	case 107:
+		op_toaltstack(stack, altstack);
+		break;
+	case 108:
+		op_fromaltstack(stack, altstack);
+		break;
 	case 109:
 		op_2drop(stack);
 		break;
@@ -436,21 +529,51 @@ bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, 
 	case 112:
 		op_2over(stack);
 		break;
-	//case 113:
-	//	op_2rot(stack);
-	//	break;
-	//case 114:
-	//	op_2swap(stack);
-	//	break;
-	//case 115:
-	//	op_ifdup(stack);
-	//	break;
-	//case:
-	//	op_(stack);
-	//	break;
-	//case 81:
-	//	op_1(stack);
-	//	break;
+	case 113:
+		op_2rot(stack);
+		break;
+	case 114:
+		op_2swap(stack);
+		break;
+	case 115:
+		op_ifdup(stack);
+		break;
+	case 116:
+		op_depth(stack);
+		break;
+	case 117:
+		op_drop(stack);
+		break;
+	case 118:
+		op_dup(stack);
+		break;
+	case 119:
+		op_nip(stack);
+		break;
+	case 120:
+		op_over(stack);
+		break;
+	case 121:
+		throw("NOT IMPLEMENTED");
+		break;
+	case 166:
+		op_ripemd160(stack);
+		break;
+	case 167:
+		op_sha1(stack);
+		break;
+	case 168:
+		op_sha256(stack);
+		break;
+	case 169:
+		op_hash160(stack);
+		break;
+	case 170:
+		op_hash256(stack);
+		break;
+	case 172:
+		op_checksig(stack);
+		break;
 	default:
 		throw("OP NOT FOUND");
 		break;

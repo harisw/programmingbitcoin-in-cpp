@@ -4,6 +4,15 @@ Tx::Tx()
 {
 }
 
+Tx::Tx(cpp_int inp_version, vector<TxIn> inp_tx_ins, vector<TxOut> inp_tx_outs, cpp_int inp_locktime, bool inp_testnet)
+{
+	this->version = inp_version;
+	this->tx_ins = inp_tx_ins;
+	this->tx_outs = inp_tx_outs;
+	this->locktime = inp_locktime;
+	this->testnet = inp_testnet;
+}
+
 Tx::Tx(string input_stream, bool testnet)
 {
 	//cout << "Input Stream : " << input_stream << endl;
@@ -24,14 +33,7 @@ Tx::Tx(string input_stream, bool testnet)
 	this->locktime = little_endian_to_int(input_stream);
 }
 
-Tx::Tx(cpp_int inp_version, vector<TxIn> inp_tx_ins, vector<TxOut> inp_tx_outs, cpp_int inp_locktime, bool inp_testnet)
-{
-	this->version = inp_version;
-	this->tx_ins = inp_tx_ins;
-	this->tx_outs = inp_tx_outs;
-	this->locktime = inp_locktime;
-	this->testnet = inp_testnet;
-}
+
 
 void Tx::print()
 {
@@ -61,12 +63,29 @@ string Tx::id()
 cpp_int Tx::hash()
 {
 	string serialized = this->serialize();
-	cout << "serialized : " << serialized << endl;
+	
 	string hash_result = hash256(serialized);
-	cout << "hash result : " << hash_result << endl;
+	
 	hash_result = string(hash_result.rbegin(), hash_result.rend());
-	cout << "hash reversed : " << hash_result << endl;
+	
 	return cpp_int("0x"+hash_result);
+}
+
+cpp_int Tx::fee()
+{
+	cpp_int input_sum = 0;
+	cpp_int output_sum = 0;
+
+	vector<TxIn>::iterator it_in;
+	for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++) {
+		input_sum += it_in->value(this->testnet);
+	}
+
+	vector<TxOut>::iterator it_out;
+	for (it_out = this->tx_outs.begin(); it_out != this->tx_outs.end(); it_out++) {
+		output_sum += it_out->amount;
+	}
+	return input_sum - output_sum;
 }
 
 string Tx::serialize()
@@ -97,22 +116,7 @@ string Tx::serialize()
 	return result;
 }
 
-cpp_int Tx::fee()
-{
-	cpp_int input_sum = 0;
-	cpp_int output_sum = 0;
 
-	vector<TxIn>::iterator it_in;
-	for (it_in = this->tx_ins.begin(); it_in != this->tx_ins.end(); it_in++) {
-		input_sum += it_in->value(this->testnet);
-	}
-
-	vector<TxOut>::iterator it_out;
-	for (it_out = this->tx_outs.begin(); it_out != this->tx_outs.end(); it_out++) {
-		output_sum += it_out->amount;
-	}
-	return input_sum - output_sum;
-}
 
 bool Tx::verify()
 {

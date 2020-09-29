@@ -15,15 +15,15 @@ TxIn::TxIn(string inp_prev_tx, cpp_int inp_prev_index, Script inp_script_sig, cp
 
 TxIn::TxIn(string &inp_stream)
 {
-	this->prev_tx = little_endian_to_byte(inp_stream.substr(0, 64));
-	inp_stream.erase(0, 64);
+	this->prev_tx = little_endian_to_byte(inp_stream.substr(0, 32*BYTE_MULTIPLIER));
+	inp_stream.erase(0, 32 * BYTE_MULTIPLIER);
 
-	this->prev_index = little_endian_to_int(inp_stream.substr(0, 8));
-	inp_stream.erase(0, 8);
+	this->prev_index = little_endian_to_int(inp_stream.substr(0, 4*BYTE_MULTIPLIER));
+	inp_stream.erase(0, 4 * BYTE_MULTIPLIER);
 
 	this->script_sig = Script(inp_stream);
-	this->sequence = little_endian_to_int(inp_stream.substr(0, 8));
-	inp_stream.erase(0, 8);
+	this->sequence = little_endian_to_int(inp_stream.substr(0, 4 * BYTE_MULTIPLIER));
+	inp_stream.erase(0, 4 * BYTE_MULTIPLIER);
 }
 
 string TxIn::serialize()

@@ -120,7 +120,9 @@ bool Script::evaluate(string z)
 		string cmd = temp_cmds.back(); temp_cmds.pop_back();
 		
 		if (is_integer(cmd)) {
-			int cmd_int = stoi(cmd);
+			cpp_int boost_int = cpp_int(cmd);
+			
+			int cmd_int = static_cast<int>(boost_int);
 
 			if (99 <= cmd_int && cmd_int <= 100) {
 				if (!Op::OP_CODE_FUNC(cmd_int, stack, altstack, temp_cmds)) {

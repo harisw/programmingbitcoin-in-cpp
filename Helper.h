@@ -248,9 +248,9 @@ inline cpp_int read_varint(string &inp_stream)
 		inp_stream.erase(0, 16);
 		return little_endian_to_int(result);
 	}
-	else {
+	else
 		return cpp_int(result + first_byte);
-	}
+
 }
 
 inline bool is_integer(string inp)
