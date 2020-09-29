@@ -3,7 +3,7 @@
 #ifndef OP_H
 #define OP_H
 #include "Helper.h"
-
+#include "S256Point.h"
 #include <map>
 
 class Script;

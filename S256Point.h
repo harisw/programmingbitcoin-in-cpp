@@ -17,6 +17,7 @@ public:
 	S256Point(S256Field x, S256Field y);
 	S256Point(S256Field x, S256Field y, S256Field  a, S256Field  b);
 	S256Point(cpp_int x, cpp_int y);
+	S256Point(string sec_bin);
 	bool operator==(const S256Point& other);
 	bool operator!=(const S256Point& other);
 	S256Point operator+(S256Point& other);
@@ -28,7 +29,6 @@ public:
 	S256Field  getB();
 	bool verify(cpp_int z, Signature sig);
 	string sec(bool compressed = true);
-	S256Point parse(string sec_bin);
 	string address(bool compressed = true, bool testnet = false);
 };
 

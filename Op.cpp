@@ -439,6 +439,62 @@ bool op_ripemd160(vector<string> stack)
 	return true;
 }
 
+bool op_sha1(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	string elem = stack.back(); stack.pop_back();
+	stack.push_back(sha1::hash_hex(elem));
+	return true;
+}
+
+bool op_sha256(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	string elem = stack.back(); stack.pop_back();
+	stack.push_back(sha256::hash_hex(elem));
+	return true;
+}
+
+bool op_hash160(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	string elem = stack.back(); stack.pop_back();
+	stack.push_back(hash160(elem));
+	return true;
+}
+
+bool op_hash256(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	string elem = stack.back(); stack.pop_back();
+	stack.push_back(hash256(elem));
+	return true;
+}
+
+bool op_checksig(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	string sec_pubkey = stack.back(); stack.pop_back();
+	string der_signature = stack.back();
+	der_signature = der_signature.substr(0, der_signature.length() - 1 * BYTE_MULTIPLIER); //TAKE OFF THE HASH TYPE ( LAST BYTE)
+
+	try
+	{
+		S256Point point = S256Point(sec_pubkey);
+		Signature sig = Signature
+	}
+	catch (const std::exception&)
+	{
+
+	}
+	return true;
+}
+
 bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, vector<string> cmds, string z)
 {
 	switch (cmd)

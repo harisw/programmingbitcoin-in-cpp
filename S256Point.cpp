@@ -174,14 +174,16 @@ string S256Point::sec(bool compressed)
 	}
 }
 
-S256Point S256Point::parse(string sec_bin)
+S256Point::S256Point(string sec_bin)
 {
 	cpp_int P("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F");
 
 	if (sec_bin.substr(0, 2) == "04") {
 		cpp_int parsed_x(sec_bin.substr(2, 32));
 		cpp_int parsed_y(sec_bin.substr(32, 32));
-		return S256Point(parsed_x, parsed_y);
+		this->x = parsed_x;
+		this->y = parsed_y;
+		return;
 	}
 
 	bool is_even = sec_bin.substr(0, 2) == "02";
@@ -202,10 +204,11 @@ S256Point S256Point::parse(string sec_bin)
 		odd_beta = beta;
 	}
 		
-	if(is_even)
-		return S256Point(finite_x, even_beta);
+	this->x = finite_x;
+	if (is_even)
+		this->y = even_beta;
 	else
-		return S256Point(finite_x, odd_beta);
+		this->y = odd_beta;
 }
 
 string S256Point::address(bool compressed, bool testnet)

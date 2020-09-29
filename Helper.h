@@ -17,13 +17,12 @@
 #include <boost/lexical_cast.hpp>
 #include "ripemd160.h"
 #include "sha256.h"
+#include "sha1.h"
 
 
 using namespace std;
 using namespace boost;
 using boost::multiprecision::cpp_int;
-
-
 
 //string BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
