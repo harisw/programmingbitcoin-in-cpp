@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <deque>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>

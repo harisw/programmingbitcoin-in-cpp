@@ -111,13 +111,13 @@ Script Script::operator+(Script& operand)
 
 bool Script::evaluate(string z)
 {
-	vector<string> temp_cmds = this->cmds;
+	deque<string> temp_cmds(this->cmds.begin(), this->cmds.end());
 	vector<string> stack;
 	vector<string> altstack;
 	
 	while (temp_cmds.size() > 0)
 	{
-		string cmd = temp_cmds.back(); temp_cmds.pop_back();
+		string cmd = temp_cmds.front(); temp_cmds.pop_front();
 		
 		if (is_integer(cmd)) {
 			cpp_int boost_int = cpp_int(cmd);

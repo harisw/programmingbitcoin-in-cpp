@@ -10,6 +10,7 @@ private:
 	cpp_int r;
 	cpp_int s;
 public:
+	Signature();
 	Signature(cpp_int inp_r, cpp_int inp_s);
 	Signature(string signature_bin);
 	cpp_int getR();

@@ -11,7 +11,7 @@ class Script;
 class Op
 {
 public:
-	static bool OP_CODE_FUNC(int cmd, vector<string> &stack, vector<string> &altstack, vector<string> cmds, string z = 0);
+	static bool OP_CODE_FUNC(int cmd, vector<string> &stack, vector<string> &altstack, deque<string> cmds, string z = 0);
 	static Script p2pkh_script(string h160);
 	static map<int, string> OP_CODE_NAMES;
 private:

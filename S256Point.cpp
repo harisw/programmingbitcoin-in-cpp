@@ -112,8 +112,9 @@ S256Point S256Point::operator+(S256Point& other)
 	x3 = s * *2 - 2 * x1
 	y3 = s * (x1 - x3) - y1*/
 	if (*this == other) {
-		S256Field slope = ((3*(this->x.pow(2)))+this->a) / (2 * this->y);
-		S256Field x3 = (slope.pow(2)) - 2 * this->x;
+		S256Field temp = 3 * this->x.pow(2);
+		S256Field slope = (temp+this->a) / (2 * this->y);
+		S256Field x3 = (slope.pow(2)) - (2 * this->x);
 		S256Field y3 = (slope*(this->x - x3)) - this->y;
 		return S256Point(x3, y3, this->a, this->b);
 	}
@@ -143,6 +144,9 @@ S256Field S256Point::getB()
 
 bool S256Point::verify(cpp_int z, Signature sig)
 {
+	cout << "z : " << z << endl;
+	cout << "Sig r : " << sig.getR() << endl;
+	cout << "Sig s : " << sig.getS() << endl;
 	S256Point genPoint = S256Point(cpp_int{ "0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798" },
 		cpp_int{ "0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8" });
 
@@ -151,8 +155,14 @@ bool S256Point::verify(cpp_int z, Signature sig)
 	cpp_int s_inv = ipow(sig.getS(), N - 2, N);
 	cpp_int u = (z * s_inv) % N;
 	cpp_int v = (sig.getR() * s_inv) % N;
+	
 	S256Point lh = (u * genPoint);
+	
+	cout << "v : " << v << endl;
+	this->print();
 	S256Point rh = (v * *this);
+	
+	rh.print();
 	S256Point total =  lh + rh;
 	return total.x.getNum() == sig.getR();
 }
@@ -177,10 +187,12 @@ string S256Point::sec(bool compressed)
 S256Point::S256Point(string sec_bin)
 {
 	cpp_int P("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F");
+	this->a = S256Field(S256_A);
+	this->b = S256Field(S256_B);
 
 	if (sec_bin.substr(0, 2) == "04") {
-		cpp_int parsed_x(sec_bin.substr(2, 32));
-		cpp_int parsed_y(sec_bin.substr(32, 32));
+		cpp_int parsed_x("0x"+sec_bin.substr(2, 32*BYTE_MULTIPLIER));
+		cpp_int parsed_y("0x" + sec_bin.substr(2 + 32 * BYTE_MULTIPLIER, 32*BYTE_MULTIPLIER));
 		this->x = parsed_x;
 		this->y = parsed_y;
 		return;
@@ -222,9 +234,14 @@ string S256Point::address(bool compressed, bool testnet)
 	return base58_checksum(prefix + hash160_result);
 }
 
+void S256Point::print()
+{
+	cout << "Point ( " << dec_to_hex_byte(this->x.getNum()) << " , " << dec_to_hex_byte(this->y.getNum()) << " )" << endl;
+}
+
 S256Point operator*(cpp_int lhs, S256Point& rhs)
 {
-	S256Point result = S256Point((cpp_int)0, (cpp_int)0, rhs.a, rhs.b);
+	S256Point result = S256Point((cpp_int)0, (cpp_int)0, rhs.getA(), rhs.getB());
 	S256Point current = rhs;
 	while (lhs) {
 		if (lhs & 1)

@@ -18,12 +18,14 @@ S256Field::S256Field(cpp_int num)
 
 S256Field::S256Field(cpp_int num, cpp_int prime)
 {
+	cpp_int s256_prime("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F");
+
 	if (num >= prime || num < 0) {
 		throw("Number is not in field range 0 to prime number");
 		return;
 	}
 	this->num = num;
-	this->prime = prime;
+	this->prime = s256_prime;
 }
 
 bool S256Field::operator==(cpp_int other)

@@ -30,6 +30,7 @@ public:
 	bool verify(cpp_int z, Signature sig);
 	string sec(bool compressed = true);
 	string address(bool compressed = true, bool testnet = false);
+	void print();
 };
 
 #endif

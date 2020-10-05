@@ -163,7 +163,7 @@ bool op_nop(vector<string>& stack)
 	return true;
 }
 
-bool op_if(vector<string>& stack, vector<string> &items)
+bool op_if(vector<string>& stack, deque<string> &items)
 {
 	if (stack.size() < 1)
 		return false;
@@ -197,7 +197,7 @@ bool op_if(vector<string>& stack, vector<string> &items)
 	if (!found)
 		return false;
 	string element = stack.back();
-	vector<string> result;
+	deque<string> result;
 
 	if (decode_num(element) == 0)
 		result.insert(result.begin(), false_items.begin(), false_items.end());
@@ -209,7 +209,7 @@ bool op_if(vector<string>& stack, vector<string> &items)
 	return true;
 }
 
-bool op_notif(vector<string>& stack, vector<string>& items)
+bool op_notif(vector<string>& stack, deque<string>& items)
 {
 	if (stack.size() < 1)
 		return false;
@@ -243,7 +243,7 @@ bool op_notif(vector<string>& stack, vector<string>& items)
 	if (!found)
 		return false;
 	string element = stack.back();
-	vector<string> result;
+	deque<string> result;
 
 	if (decode_num(element) == 0)
 		result.insert(result.begin(), true_items.begin(), true_items.end());
@@ -475,7 +475,7 @@ bool op_hash256(vector<string> stack)
 	return true;
 }
 
-bool op_checksig(vector<string> stack)
+bool op_checksig(vector<string> stack, string z)
 {
 	if (stack.size() < 2)
 		return false;
@@ -483,158 +483,174 @@ bool op_checksig(vector<string> stack)
 	string der_signature = stack.back();
 	der_signature = der_signature.substr(0, der_signature.length() - 1 * BYTE_MULTIPLIER); //TAKE OFF THE HASH TYPE ( LAST BYTE)
 
+	S256Point point;
+	Signature sig;
 	try
 	{
-		S256Point point = S256Point(sec_pubkey);
-		Signature sig = Signature
+		point = S256Point(sec_pubkey);
+		sig = Signature(der_signature);
 	}
 	catch (const std::exception&)
 	{
-
+		throw("Error Parsing");
+		return false;
 	}
+	string result;
+	cpp_int hash_z = cpp_int(z);
+	if (point.verify(hash_z, sig)) {
+		result = encode_num(1);
+	}
+	else {
+		result = encode_num(0);
+	}
+	vector<string> new_stack;
+	new_stack.push_back(result);
+	new_stack.insert(new_stack.end(), stack.begin(), stack.end());
+	stack = new_stack;
 	return true;
 }
 
-bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, vector<string> cmds, string z)
+bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, deque<string> cmds, string z)
 {
+	bool result = false;
 	switch (cmd)
 	{
 	case 0:
-		op_0(stack);
+		result = op_0(stack);
 		break;
 	case 79:
-		op_1negate(stack);
+		result = op_1negate(stack);
 		break;
 	case 81:
-		op_1(stack);
+		result = op_1(stack);
 		break;
 	case 82:
-		op_2(stack);
+		result = op_2(stack);
 		break;
 	case 83:
-		op_3(stack);
+		result = op_3(stack);
 		break;
 	case 84:
-		op_4(stack);
+		result = op_4(stack);
 		break;
 	case 85:
-		op_5(stack);
+		result = op_5(stack);
 		break;
 	case 86:
-		op_6(stack);
+		result = op_6(stack);
 		break;
 	case 87:
-		op_7(stack);
+		result = op_7(stack);
 		break;
 	case 88:
-		op_8(stack);
+		result = op_8(stack);
 		break;
 	case 89:
-		op_9(stack);
+		result = op_9(stack);
 		break;
 	case 90:
-		op_10(stack);
+		result = op_10(stack);
 	case 91:
-		op_11(stack);
+		result = op_11(stack);
 		break;
 	case 92:
-		op_12(stack);
+		result = op_12(stack);
 		break;
 	case 93:
-		op_13(stack);
+		result = op_13(stack);
 		break;
 	case 94:
-		op_14(stack);
+		result = op_14(stack);
 		break;
 	case 95:
-		op_15(stack);
+		result = op_15(stack);
 		break;
 	case 96:
-		op_16(stack);
+		result = op_16(stack);
 		break;
 	case 97:
-		op_nop(stack);
+		result = op_nop(stack);
 		break;
 	case 99:
-		op_if(stack, cmds);
+		result = op_if(stack, cmds);
 		break;
 	case 100:
-		op_notif(stack, cmds);
+		result = op_notif(stack, cmds);
 		break;
 	case 105:
-		op_verify(stack);
+		result = op_verify(stack);
 		break;
 	case 106:
-		op_return(stack);
+		result = op_return(stack);
 		break;
 	case 107:
-		op_toaltstack(stack, altstack);
+		result = op_toaltstack(stack, altstack);
 		break;
 	case 108:
-		op_fromaltstack(stack, altstack);
+		result = op_fromaltstack(stack, altstack);
 		break;
 	case 109:
-		op_2drop(stack);
+		result = op_2drop(stack);
 		break;
 	case 110:
-		op_2dup(stack);
+		result = op_2dup(stack);
 		break;
 	case 111:
-		op_3dup(stack);
+		result = op_3dup(stack);
 		break;
 	case 112:
-		op_2over(stack);
+		result = op_2over(stack);
 		break;
 	case 113:
-		op_2rot(stack);
+		result = op_2rot(stack);
 		break;
 	case 114:
-		op_2swap(stack);
+		result = op_2swap(stack);
 		break;
 	case 115:
-		op_ifdup(stack);
+		result = op_ifdup(stack);
 		break;
 	case 116:
-		op_depth(stack);
+		result = op_depth(stack);
 		break;
 	case 117:
-		op_drop(stack);
+		result = op_drop(stack);
 		break;
 	case 118:
-		op_dup(stack);
+		result = op_dup(stack);
 		break;
 	case 119:
-		op_nip(stack);
+		result = op_nip(stack);
 		break;
 	case 120:
-		op_over(stack);
+		result = op_over(stack);
 		break;
 	case 121:
 		throw("NOT IMPLEMENTED");
 		break;
 	case 166:
-		op_ripemd160(stack);
+		result = op_ripemd160(stack);
 		break;
 	case 167:
-		op_sha1(stack);
+		result = op_sha1(stack);
 		break;
 	case 168:
-		op_sha256(stack);
+		result = op_sha256(stack);
 		break;
 	case 169:
-		op_hash160(stack);
+		result = op_hash160(stack);
 		break;
 	case 170:
-		op_hash256(stack);
+		result = op_hash256(stack);
 		break;
 	case 172:
-		op_checksig(stack);
+		result = op_checksig(stack, z);
 		break;
 	default:
 		throw("OP NOT FOUND");
 		break;
 	}
-	return false;
+	return result;
 }
 
 Script Op::p2pkh_script(string h160)
