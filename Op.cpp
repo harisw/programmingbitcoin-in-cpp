@@ -23,6 +23,29 @@ string encode_num(int num)
 	return result;
 }
 
+string encode_num(cpp_int num)
+{
+	if (!num)
+		return "";
+	cpp_int abs_num = abs(num);
+	bool is_negative = num < 0;
+	string result = "";
+	while (abs_num) {
+		result.append(lexical_cast<string>(abs_num & 0xff));
+		abs_num >>= 8;
+	}
+	if (result.back() & 0x80) {
+		if (is_negative)
+			result.append(to_string(0x80));
+		else
+			result.append(to_string(0));
+	}
+	else if (is_negative) {
+		result.back() = result.back() | 0x80;
+	}
+	return result;
+}
+
 cpp_int decode_num(string element)
 {
 	if (element == "")
@@ -423,6 +446,269 @@ bool op_over(vector<string> stack)
 	return true;
 }
 
+bool op_equal(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	string elem1 = stack.back(); stack.pop_back();
+	string elem2 = stack.back(); stack.pop_back();
+
+	if(elem1 == elem2)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_1add(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	cpp_int elem = decode_num(stack.back()); stack.pop_back();
+	stack.push_back(encode_num(elem + 1));
+	return true;
+}
+
+bool op_1sub(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	cpp_int elem = decode_num(stack.back()); stack.pop_back();
+	stack.push_back(encode_num(elem - 1));
+	return true;
+}
+
+bool op_negate(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	cpp_int elem = decode_num(stack.back()); stack.pop_back();
+	stack.push_back(encode_num(-elem));
+	return true;
+}
+
+bool op_abs(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	cpp_int elem = decode_num(stack.back()); stack.pop_back();
+	if(elem < 0)
+		stack.push_back(encode_num(-elem));
+	else
+		stack.push_back(encode_num(elem));
+	return true;
+}
+
+bool op_not(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	cpp_int elem = decode_num(stack.back()); stack.pop_back();
+	if(elem == 0)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_0notequal(vector<string> stack)
+{
+	if (stack.size() < 1)
+		return false;
+	cpp_int elem = decode_num(stack.back()); stack.pop_back();
+	if (elem == 0)
+		stack.push_back(encode_num(0));
+	else
+		stack.push_back(encode_num(1));
+	return true;
+}
+
+bool op_add(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	stack.push_back(encode_num(elem1 + elem2));
+	return true;
+}
+
+bool op_sub(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	stack.push_back(encode_num(elem2 - elem1));
+	return true;
+}
+
+bool op_equalverify(vector<string> stack)
+{
+	return op_equal(stack) && op_verify(stack);
+}
+
+
+bool op_mul(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	
+	stack.push_back(encode_num(elem1 * elem2));
+	return true;
+}
+
+bool op_booland(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if(elem1 && elem2)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_boolor(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem1 || elem2)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_numequal(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem1 == elem2)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_numequalverify(vector<string> stack)
+{
+	return op_numequal(stack) && op_verify(stack);
+}
+
+bool op_numnotequal(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem1 == elem2)
+		stack.push_back(encode_num(0));
+	else
+		stack.push_back(encode_num(1));
+	return true;
+}
+
+bool op_lessthan(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem2 < elem1)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_greaterthan(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem2 > elem1)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_lessthanorequal(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem2 <= elem1)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_greaterthanorequal(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem2 >= elem1)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
+bool op_min(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem1 < elem2)
+		stack.push_back(encode_num(elem1));
+	else
+		stack.push_back(encode_num(elem2));
+	return true;
+}
+
+bool op_max(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int elem1 = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem2 = decode_num(stack.back()); stack.pop_back();
+	if (elem1 > elem2)
+		stack.push_back(encode_num(elem1));
+	else
+		stack.push_back(encode_num(elem2));
+	return true;
+}
+
+bool op_within(vector<string> stack)
+{
+	if (stack.size() < 2)
+		return false;
+	cpp_int maximum = decode_num(stack.back()); stack.pop_back();
+	cpp_int minimum = decode_num(stack.back()); stack.pop_back();
+	cpp_int elem = decode_num(stack.back()); stack.pop_back();
+	if (elem >= minimum && elem < maximum)
+		stack.push_back(encode_num(1));
+	else
+		stack.push_back(encode_num(0));
+	return true;
+}
+
 bool op_ripemd160(vector<string> stack)
 {
 	if (stack.size() < 1)
@@ -510,7 +796,7 @@ bool op_checksig(vector<string> stack, string z)
 	return true;
 }
 
-bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, deque<string> cmds, string z)
+bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, deque<string> &cmds, string z)
 {
 	bool result = false;
 	switch (cmd)
@@ -627,6 +913,73 @@ bool Op::OP_CODE_FUNC(int cmd, vector<string>& stack, vector<string> &altstack, 
 		break;
 	case 121:
 		throw("NOT IMPLEMENTED");
+		break;
+	case 135:
+		result = op_equal(stack);
+		break;
+	case 136:
+		result = op_equalverify(stack);
+		break;
+	case 139:
+		result = op_1add(stack);
+	case 140:
+		result = op_1sub(stack);
+	case 143:
+		result = op_negate(stack);
+		break;
+	case 144:
+		result = op_abs(stack);
+		break;
+	case 145:
+		result = op_not(stack);
+		break;
+	case 146:
+		result = op_0notequal(stack);
+		break;
+	case 147:
+		result = op_add(stack);
+		break;
+	case 148:
+		result = op_sub(stack);
+		break;
+	case 149:
+		result = op_mul(stack);
+		break;
+	case 154:
+		result = op_booland(stack);
+		break;
+	case 155:
+		result = op_boolor(stack);
+		break;
+	case 156:
+		result = op_numequal(stack);
+		break;
+	case 157:
+		result = op_numequalverify(stack);
+		break;
+	case 158:
+		result = op_numnotequal(stack);
+		break;
+	case 159:
+		result = op_lessthan(stack);
+		break;
+	case 160:
+		result = op_greaterthan(stack);
+		break;
+	case 161:
+		result = op_lessthanorequal(stack);
+		break;
+	case 162:
+		result = op_greaterthanorequal(stack);
+		break;
+	case 163:
+		result = op_min(stack);
+		break;
+	case 164:
+		result = op_max(stack);
+		break;
+	case 165:
+		result = op_within(stack);
 		break;
 	case 166:
 		result = op_ripemd160(stack);
